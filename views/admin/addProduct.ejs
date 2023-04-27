@@ -1,0 +1,75 @@
+<%- include('_userheader') %>
+
+	
+	<%- include('_adminHeaderNavBar') %>
+	
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Add Product</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/dashboard">Dashboard<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/add-product">Add Product</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<!-- <div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="/assets/img/login.jpg" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>Enjoy our offers and privilege by registering on our websit and loggin in </p>
+							<a class="primary-btn" href="registration.html">Create an Account</a>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-lg-12">
+					<div class="login_form_inner">
+						<h3>Add New Product</h3>
+						<form class="row login_form" action="/add-product" method="post" id="contactForm" >
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="addName" name="addName" placeholder="Product Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Product Name'">
+							</div>
+							<div class="col-md-12 row form-group">
+								<label class="col-md-5 mt-3 ml-2" for="addBrand">Choose the Brand:</label>
+                                    <select class="col-md-6" name="addBrand" id="addBrand">
+                                      <option value="adidas">Adidas</option>
+                                      <option value="nike">Nike</option>
+                                      <option value="new balance">New Balance</option>
+                                      <option value="hoodies">Hoodies</option>
+                                    </select>
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="addDescription" name="addDescription" placeholder="Product Description" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Product Description'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="number" class="form-control" id="addPrice" name="addPrice" placeholder="Price" onfocus="this.placeholder = ''" onblur="this.placeholder = 'price'">
+							</div>
+							
+							<div class="col-md-12 form-group mb-5">
+								<button type="submit" value="submit" class="primary-btn">Add User</button>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+
+	
+
+
+	<%- include('_userfooter') %>

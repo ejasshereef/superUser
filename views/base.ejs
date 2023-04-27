@@ -1,0 +1,73 @@
+
+<%-include('_header')-%>
+
+    <div class="container text-center mt-5">
+       <div class="container border w-25 py-5">
+         <h2 class="font weight bold">Login System</h2>
+         <span">Login in the existing user</span>
+         <% if(locals.logout){%>
+            <div class="alter alert-success text-center">
+                <%=logout%>
+            </div>
+         <%}%> 
+
+         
+         
+         <form onsubmit="return validate()"  action="/login" method="POST" class="pt-3">
+            <div>
+                <input id="email" type="email" class="form-control" placeholder="email" name="email">
+                <p>Registered email address</p>
+            </div>
+            <div>
+                <input id="password" type="password" class="form-control" name="password" placeholder="password">
+
+            </div>
+            <% if(locals.message){ %>
+                <div id="msg" class="alert alert-danger"><%=locals.message%></div>
+             <% } %>  
+             <% setTimeout %>
+                <button type="submit" class="btn btn-success rounded-pill mt-3">Submit</button>  
+         </form>
+
+         <div class=" container-center">
+            <div class="row">
+                <form action="/signup" class=" col-lg-6 ">
+                    <button  action="submit" class="btn btn-success rounded-pill mt-3  ">Sign Up</button>
+                   </form>
+                   <form action="/admin" class=" col-lg-6 ">
+                    <button  action="submit" class="btn btn-success rounded-pill mt-3  ">Admin</button>
+                   </form>
+            </div>
+           </div> 
+
+        </div>
+
+        
+      
+    </div>
+
+     
+
+<script>
+  setTimeout(() => {
+        document.getElementById("msg").style.display='none'
+    },2000);
+
+    function validate(){
+        let email=document.getElementById('email')
+        let password=document.getElementById('password')
+
+        const regexMail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]/gm;
+        const regexPassword = /[a-zA-Z0-9]{4}/gm;
+        if((email.value !=''&& regexMail.test(email.value))&&(password.value !=''&& regexPassword.test(password.value))){
+            return true
+        }else{
+            alert("enter a valid input")
+            return false
+
+        }
+
+   }
+</script>
+<%-include('_footer')-%>    
+    
