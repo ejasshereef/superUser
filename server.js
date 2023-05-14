@@ -2,15 +2,16 @@ const express=require('express')
 const morgan=require('morgan')
 const bodyparser=require('body-parser')
 const path=require('path')
+const {v4:uuidv4}=require('uuid')
 require('dotenv').config();
 const session=require('express-session')
+const cookieParser=require('cookie-parser')
+const jwt=require('jsonwebtoken')
 const twilioRouter=require('./server/routes/router');
-const fs=require('fs')
-const multer=require('multer')
-
 
 
 const connectDB=require('./server/database/connection')
+const { checkUser } = require('./middleware/userMiddleware')
 
 const app=express()
 
@@ -19,18 +20,20 @@ const {PORT}=process.env;
 const port=3000||PORT
 
 //------log requests----//
-app.use(morgan('tiny'))
+// app.use(morgan('tiny'))
 
 
 //-----mongoDB connection-----//
 connectDB()
 
+app.use(cookieParser())
+
 //------session-----//
 app.use(session({
-    secret:"secret",
-    cookie:{sameSite:"strict"},
+    secret:uuidv4(),
     resave:false,
     saveUninitialized:true
+
 }))
 
 
@@ -42,15 +45,10 @@ app.use(bodyparser.json())
 app.use(express.static(path.join(__dirname,'public')))
 app.use('/js',express.static(path.resolve(__dirname,"assets/js")))
 
-//-----using img in db-----//
-let storage=multer.diskStorage({
-  destination:(req,file,cb)=>{
-    cb(null,'uploads')
-  },
-  filename:(req,file,cb)=>{
-    cb(null,file.fieldname + '-' + Date.now())
-  }
-})
+//upload file show
+
+app.use(express.static('uploads'))
+
 
 
 //-----sms verification----//
@@ -64,8 +62,8 @@ app.set('views', [
     __dirname + '/views/admin',
   ]);
 
-
-app.use('/',require('./server/routes/router'))
+//app.get('*',checkUser)
+app.use(require('./server/routes/router'))
 
 app.listen(port,()=>{console.log(`listening to http://localhost:${port}`)})
 

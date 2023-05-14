@@ -1,14 +1,15 @@
 const mongoose=require('mongoose')
 
-var productSchema=new mongoose.Schema({
+let productSchema=new mongoose.Schema({
     
     name:{
         type:String,
         required:true
     },
     brand:{
-        type:String,
-        required:true
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'branddb'
+        
        
     },
     description:{
@@ -16,12 +17,15 @@ var productSchema=new mongoose.Schema({
         required:true
     },
     image:{
-        data:Buffer,
-        contentType:String
+       type:String
     },
     price:{
         type:Number,
         required:true
+    },
+    category:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'categorydb'
     }
    
 })

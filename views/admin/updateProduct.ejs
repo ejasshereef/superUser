@@ -38,19 +38,25 @@
 				<div class="col-lg-12">
 					<div class="login_form_inner">
 						<h3>Add New Product</h3>
-						<form class="row login_form"  method="put" id="updateProduct" >
+						<form class="row login_form" action="/update-product/<%= products._id %>"  method="post" id="updateProduct" >
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="addName" name="addName" value="<%=products.name  %>" placeholder="Product Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Product Name'">
+								<input type="text" class="form-control" id="addName" name="name" value="<%=products.name  %>" placeholder="Product Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Product Name'">
 							</div>
+							
 							<div class="col-md-12 row form-group">
 								<label class="col-md-5 mt-3 ml-2" for="addBrand">Choose the Brand:</label>
-                                    <select class="col-md-6" name="addBrand" value="<%=products.brand  %>" id="addBrand">
-                                      <option value="<%=products.brand %>"><%=products.brand %></option>
-                                      <option value="adidas">Adidas</option>
-                                      <option value="nike">Nike</option>
-                                      <option value="new balance">New Balance</option>
-                                      <option value="hoodies">Hoodies</option>
-                                    </select>
+								<select class="col-md-6" name="addBrand" >
+									<% brand.forEach(function(brand) { %>
+									<option value="<%= brand._id %>" <% if (brand.name===products.brand ) {
+									  %>
+									  selected
+									  <% } %>
+										>
+										<%= brand.name %>
+									</option>
+									
+									<%});%>
+						          </select>
 							</div>
                             <div class="col-md-12 form-group">
 								<input type="text" class="form-control" id="addDescription" name="addDescription" value="<%=products.description  %>" placeholder="Product Description" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Product Description'">

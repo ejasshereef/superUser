@@ -1,13 +1,9 @@
 const mongoose=require('mongoose')
 
-var brandSchema=new mongoose.Schema({
+let brandSchema=new mongoose.Schema({
     name:{
         type:String,
         requierd:true
-    },
-    email:{
-        type:String,
-
     }
 })
 

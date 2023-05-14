@@ -1,0 +1,297 @@
+
+
+<%- include('_userheader') %>
+
+    <!-- Start Header Area -->
+	<%- include('_headerNavBar') %>
+	<!-- End Header Area -->
+
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Shopping Cart</h1>
+                    <nav class="d-flex align-items-center">
+                        <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                        <a href="category.html">Cart</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Brand</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">delete</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <% let sum=0 %>
+                            
+                            <% if (cart) { %>
+
+                                <% (cart.products).forEach(element => { %>
+                              
+                               
+                                    <tr>
+                                        <td><%=element.name  %></td>
+                                        <td><%=element.brand.name %></td>
+                                        <td><%=element.price  %></td>
+                                        <td>
+                                            <div class="container  ">
+                                                <div class="col">
+                                                <form  class="product_count col-md-4 mb-4 " method="post" action="/cart/<%= element._id%>/inc">
+                                                    <button type="submit" value="+" ><i class="fa fa-plus-square" aria-hidden="true"></i></button>
+                                                </form>
+                                                <div class="product_count col-md-4 " ><%=element.quantity %></div>       
+                                                <form class="product_count col-md-4" method="post" action="/cart/<%= element._id%>/dec">
+                                                     <button type="submit" value="-" ><i class="fa fa-minus-square" aria-hidden="true"></i></button>
+                                                </form>
+                                                <!-- <button onclick="updateCartQuantity(quantity-input.value)" class="decrement-btn" decId="<%= element._id %>">-</button>
+                                                <input type="number" class="quantity-input" value="<%= element.quantity %>" min="1" max="99" data-product-id="<%= element._id %>">
+                                                <button onclick="updateCartQuantity(incId,quantity-input.value)" class="increment-btn" incId="<%= element._id %>">+</button> -->
+                                            </div>
+                                           </div>    
+                                        </td>
+                                        
+                                        <td><%=element.price*element.quantity %></td>
+                                        <td><a  href="/delete-cart/<%= element._id %>">
+                                            <span class="text-gradient"><i style="color: orange;" class="fa fa-trash" aria-hidden="true"></i></span>
+                                        </a></td>
+                                        <% sum = sum+(element.price*element.quantity); %>
+                                      
+                                      </form>
+                                        
+                                    </tr>
+                                    
+                                    <% }) %>
+                             
+                            <% } %>
+                            
+                            <tr class="bottom_button">
+                                <td>
+                                    <!-- <a class="gray_btn" href="#">Update Cart</a> -->
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <!-- <div class="cupon_text d-flex align-items-center">
+                                        <input type="text" placeholder="Coupon Code">
+                                        <a class="primary-btn" href="#">Apply</a>
+                                        <a class="gray_btn" href="#">Close Coupon</a>
+                                    </div> -->
+                                </td>
+                            </tr>
+                            <tr>
+
+
+                                <td>
+
+                                </td>
+                                
+
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <h5>Subtotal</h5>
+                                </td>
+                                <td>
+                                    <h5><%= sum %></h5>
+                                </td>
+                            </tr>
+
+                           
+
+                            <tr class="shipping_area">
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <h5>Shipping</h5>
+                                </td>
+                                <td>
+                                    <div class="shipping_box">
+                                        <ul class="list">
+                                           
+                                            
+                                            
+                                            <li class="active"><a href="#">Local Delivery: 20.00</a></li>
+                                        </ul>
+                                        <!-- <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
+                                        <select class="shipping_select">
+                                            <option value="1">Bangladesh</option>
+                                            <option value="2">India</option>
+                                            <option value="4">Pakistan</option>
+                                        </select>
+                                        <select class="shipping_select">
+                                            <option value="1">Select a State</option>
+                                            <option value="2">Select a State</option>
+                                            <option value="4">Select a State</option>
+                                        </select>
+                                        <input type="text" placeholder="Postcode/Zipcode">
+                                        <a class="gray_btn" href="#">Update Details</a> -->
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="out_button_area">
+                               
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                
+                                <td>
+                                    <div class="checkout_btn_inner d-flex align-items-center ">
+                                        <a  class="primary-btn" href="/loadingPage">Continue Shopping</a>
+                                        
+                                        <a class="primary-btn ml-3" href="/address">Proceed to checkout</a>
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+
+    <!-- start footer Area -->
+    <footer class="footer-area section_gap">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3  col-md-6 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h6>About Us</h6>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+                            ut labore dolore
+                            magna aliqua.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4  col-md-6 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h6>Newsletter</h6>
+                        <p>Stay update with our latest</p>
+                        <div class="" id="mc_embed_signup">
+
+                            <form target="_blank" novalidate="true" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                                method="get" class="form-inline">
+
+                                <div class="d-flex flex-row">
+
+                                    <input class="form-control" name="EMAIL" placeholder="Enter Email" onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Enter Email '" required="" type="email">
+
+
+                                    <button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right"
+                                            aria-hidden="true"></i></button>
+                                    <div style="position: absolute; left: -5000px;">
+                                        <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value=""
+                                            type="text">
+                                    </div>
+
+                                    <!-- <div class="col-lg-4 col-md-4">
+													<button class="bb-btn btn"><span class="lnr lnr-arrow-right"></span></button>
+												</div>  -->
+                                </div>
+                                <div class="info"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3  col-md-6 col-sm-6">
+                    <div class="single-footer-widget mail-chimp">
+                        <h6 class="mb-20">Instragram Feed</h6>
+                        <ul class="instafeed d-flex flex-wrap">
+                            <li><img src="img/i1.jpg" alt=""></li>
+                            <li><img src="img/i2.jpg" alt=""></li>
+                            <li><img src="img/i3.jpg" alt=""></li>
+                            <li><img src="img/i4.jpg" alt=""></li>
+                            <li><img src="img/i5.jpg" alt=""></li>
+                            <li><img src="img/i6.jpg" alt=""></li>
+                            <li><img src="img/i7.jpg" alt=""></li>
+                            <li><img src="img/i8.jpg" alt=""></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h6>Follow Us</h6>
+                        <p>Let us be social</p>
+                        <div class="footer-social d-flex align-items-center">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-dribbble"></i></a>
+                            <a href="#"><i class="fa fa-behance"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
+                <p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+</p>
+            </div>
+        </div>
+    </footer>
+    <!-- End footer Area -->
+    <script>
+        const incrementBtns = document.querySelectorAll('.increment-btn');
+        const decrementBtns = document.querySelectorAll('.decrement-btn');
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+
+
+
+
+function updateCartQuantity(productId, quantity) {
+  fetch('/cart/dec', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ productId, quantity })
+  })
+  .then(response => response.json())
+  .then(cart => {
+    quantityInputs[productId].value = cart.products[productId].quantity;
+  })
+  .catch(error => console.error(error));
+}
+    </script>
+    
+
+   <%- include('_userfooter') %>
