@@ -30,7 +30,7 @@
     <div class=" billing_details">
         <div class="row">
             <div class="col-md-8">
-                <h3>Address Details</h3>
+                <h3>Save Address Details</h3>
                 <form class="row contact_form" action="/address" method="post" novalidate="novalidate">
                     <div class="col-md-6 form-group p_star">
                         <input type="text" class="form-control" id="first" name="firstName"  onblur="this.placeholder = 'First Name*'">
@@ -86,7 +86,7 @@
                         <input type="text" class="form-control" id="zip" name="postcode" onblur="this.placeholder = 'Postcode*'">
                     </div>
                     <div class="col-md-12 form-group mt-3">
-                        <button type="submit" value="submit" class="primary-btn">Save and Proceed</button>
+                        <button type="submit" value="submit" class="primary-btn">Save</button>
                         
                     </div>
                    
@@ -94,30 +94,31 @@
             </div>
 
             <div class="col-md-4">
-                <h3>Existing Address Details</h3>
+                <h3>Saved Address Details</h3>
                   <form class="contact_form" action="">
 
                     <% if (address) { %>
 
-                        <% for( let i = 0; i < address.length; i++ ) { %>
+                       <% address.forEach(element => { %>
+                        
+                      
               
                         <input value="address" class="pixel-radio" type="radio" id="apple" name="address"><label for="address">
-                            <h5><%= address[i].firstName %></h5>
-                            
-                            <h5><%= address[i].addressLine1 %>,<%= address[i].addressLine2 %></h5>
-                            <h5><%= address[i].state %>,<%= address[i].district %>,<%= address[i].country %></h5>
-                            <h5><%= address[i].postcode %></h5>
-                            <h5><%= address[i].email %></h5>
-                            <h5><%= address[i].phone %></h5></label>
+                            <h5><%= element.firstName %></h5>
+                            <h5><%= element.addressLine1 %>,<%= element.addressLine2 %></h5>
+                            <h5><%= element.state %>,<%= element.district %>,<%= element.country %></h5>
+                            <h5><%= element.postcode %></h5>
+                            <h5><%= element.email %></h5>
+                            <h5><%= element.phone %></h5></label>
                            
                             <div class="col-md-12 form-group mt-3" >
 
                                 <!-- <button class="primary-btn" type="submit">Deliver Here</button>  -->
                                 
-                                <a href="/checkout/<%= address[i]._id%>"  class="primary-btn" >Deliver Here </a>
+                                <a href="/checkout/<%= element._id%>"  class="primary-btn" >Deliver Here </a>
                             </div>
 
-                            <% } %>
+                            <% }) %>
                             <% } %>
                   </form>
                         

@@ -13,8 +13,8 @@
 				<div class="col-first">
 					<h1>Confirmation</h1>
 					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Confirmation</a>
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/order-page">Confirmation</a>
 					</nav>
 				</div>
 			</div>
@@ -31,10 +31,18 @@
 					<div class="details_item">
 						<h4>Order Info</h4>
 						<ul class="list">
-							<li><a href="#"><span>Order number</span> : 60235</a></li>
-							<li><a href="#"><span>Date</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Total</span> : USD 2210</a></li>
-							<li><a href="#"><span>Payment method</span> : Check payments</a></li>
+							<% let sum=0 %>
+							<% if (order) { %>
+								<% for( let i = 0; i < (order.products).length; i++ ) { %>
+									<% sum=sum+order.products[i].total %>
+								<% } %>
+			
+									<li><a href="#"><span>Order number</span><%= order._id %></a></li>
+									<li><a href="#"><span>Date</span> : <%= order.updatedAt %></a></li>
+									<li><a href="#"><span>Total</span> : <%= sum+20 %> </a></li>
+									<li><a href="#"><span>Payment method</span> : <%= order.paymentMode %> </a></li>
+									
+									
 						</ul>
 					</div>
 				</div>
@@ -42,10 +50,10 @@
 					<div class="details_item">
 						<h4>Billing Address</h4>
 						<ul class="list">
-							<li><a href="#"><span>Street</span> : 56/8</a></li>
-							<li><a href="#"><span>City</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Country</span> : United States</a></li>
-							<li><a href="#"><span>Postcode </span> : 36952</a></li>
+							<li><a href="#"><span>Street</span> : <%= address.addressLine2 %></a></li>
+							<li><a href="#"><span>City</span> : <%= address.city %></a></li>
+							<li><a href="#"><span>Country</span> : <%= address.country %></a></li>
+							<li><a href="#"><span>Postcode </span> : <%= address.postcode %></a></li>
 						</ul>
 					</div>
 				</div>
@@ -53,14 +61,15 @@
 					<div class="details_item">
 						<h4>Shipping Address</h4>
 						<ul class="list">
-							<li><a href="#"><span>Street</span> : 56/8</a></li>
-							<li><a href="#"><span>City</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Country</span> : United States</a></li>
-							<li><a href="#"><span>Postcode </span> : 36952</a></li>
+							<li><a href="#"><span>Street</span> : <%= address.addressLine2 %></a></li>
+							<li><a href="#"><span>City</span> : <%= address.city %></a></li>
+							<li><a href="#"><span>Country</span> : <%= address.country %></a></li>
+							<li><a href="#"><span>Postcode </span> : <%= address.postcode %></a></li>
 						</ul>
 					</div>
 				</div>
 			</div>
+			<% } %>
 			<div class="order_details_table">
 				<h2>Order Details</h2>
 				<div class="table-responsive">
@@ -73,39 +82,26 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
+							<% if (order) { %>
+								
+								<% (order.products).forEach(element => { %>
+									<tr>
+										<td>
+											<p><%= element.name %></p>
+										</td>
+										<td>
+											<h5><%= element.quantity %></h5>
+										</td>
+										<td>
+											<p><%= element.total %></p>
+										</td>
+										
+									</tr>
+								<% }) %>
+							 
+							<% } %>
+							
+							
 							<tr>
 								<td>
 									<h4>Subtotal</h4>
@@ -114,7 +110,7 @@
 									<h5></h5>
 								</td>
 								<td>
-									<p>$2160.00</p>
+									<p><%= sum %></p>
 								</td>
 							</tr>
 							<tr>
@@ -125,7 +121,7 @@
 									<h5></h5>
 								</td>
 								<td>
-									<p>Flat rate: $50.00</p>
+									<p>Flat rate: 20.00</p>
 								</td>
 							</tr>
 							<tr>
@@ -136,7 +132,7 @@
 									<h5></h5>
 								</td>
 								<td>
-									<p>$2210.00</p>
+									<p><%= sum+20 %></p>
 								</td>
 							</tr>
 						</tbody>
@@ -146,6 +142,20 @@
 		</div>
 	</section>
 	<!--================End Order Details Area =================-->
+
+	<div class="container text-center" >
+		<div class="row" >
+			<div class=" button_button col-md-4 ml-5 ">
+				
+			</div>
+			<div class=" button_button col-md-2">
+				
+			</div>
+			<div class="button_button col-md-4 ml-5">
+				<a class="primary-btn" href="/">Contunue Shopping</a>
+			</div>
+		</div>
+	</div>
 
 	<!-- start footer Area -->
 	<footer class="footer-area section_gap">

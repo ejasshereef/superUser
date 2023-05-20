@@ -41,39 +41,41 @@
                         </thead>
                         <tbody>
                             
-                            <% let sum=0 %>
                             
                             <% if (cart) { %>
+                                <% let sum=0 %>
 
                                 <% (cart.products).forEach(element => { %>
                               
                                
                                     <tr>
-                                        <td><%=element.name  %></td>
+                                        <td><%=element.name %></td>
                                         <td><%=element.brand.name %></td>
                                         <td><%=element.price  %></td>
                                         <td>
                                             <div class="container  ">
-                                                <div class="col">
-                                                <form  class="product_count col-md-4 mb-4 " method="post" action="/cart/<%= element._id%>/inc">
+                                                <div class="col ml-5 "  >
+                                                <!-- <form  class="product_count col-md-4 mb-4 " method="post" action="/cart/<%= element._id%>/inc">
                                                     <button type="submit" value="+" ><i class="fa fa-plus-square" aria-hidden="true"></i></button>
                                                 </form>
                                                 <div class="product_count col-md-4 " ><%=element.quantity %></div>       
                                                 <form class="product_count col-md-4" method="post" action="/cart/<%= element._id%>/dec">
                                                      <button type="submit" value="-" ><i class="fa fa-minus-square" aria-hidden="true"></i></button>
-                                                </form>
-                                                <!-- <button onclick="updateCartQuantity(quantity-input.value)" class="decrement-btn" decId="<%= element._id %>">-</button>
-                                                <input type="number" class="quantity-input" value="<%= element.quantity %>" min="1" max="99" data-product-id="<%= element._id %>">
-                                                <button onclick="updateCartQuantity(incId,quantity-input.value)" class="increment-btn" incId="<%= element._id %>">+</button> -->
+                                                </form> -->
+                                                <!-- <div  id="qty" class="product_count col-md-4 " value="<%= element.quantity %>" product_id="<%= element._id %>" ><%=element.quantity %></div>  -->
+                                                <!-- <input type="number" id="qty-<%=element._id%>" class="quantity-input" value="<%= element.quantity  %>" min="1" max="99" product_id="<%= element._id %>"> -->
+                                                <button onclick="dec('<%= element._id %>')" class=" col-md-4 mb-2 " style="border-width: 0px;">-</button>
+                                                <span id="qty-<%=element._id%>"><%= element.quantity  %></span>
+                                                <button onclick="inc('<%= element._id %>')" class=" col-md-4 mb-2 " style="border-width: 0px;" >+</button>
                                             </div>
                                            </div>    
                                         </td>
                                         
-                                        <td><%=element.price*element.quantity %></td>
+                                        <td id="total-<%= element._id %>"  class="item-total" ><%= element.price*element.quantity %></td>
                                         <td><a  href="/delete-cart/<%= element._id %>">
                                             <span class="text-gradient"><i style="color: orange;" class="fa fa-trash" aria-hidden="true"></i></span>
                                         </a></td>
-                                        <% sum = sum+(element.price*element.quantity); %>
+                                       
                                       
                                       </form>
                                         
@@ -81,7 +83,7 @@
                                     
                                     <% }) %>
                              
-                            <% } %>
+                           
                             
                             <tr class="bottom_button">
                                 <td>
@@ -119,11 +121,11 @@
                                     <h5>Subtotal</h5>
                                 </td>
                                 <td>
-                                    <h5><%= sum %></h5>
+                                    <h5 id="subtotal" ><%= sum %></h5>
                                 </td>
                             </tr>
 
-                           
+                            <% } %>
 
                             <tr class="shipping_area">
                                 <td>
@@ -268,30 +270,136 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         </div>
     </footer>
     <!-- End footer Area -->
-    <script>
-        const incrementBtns = document.querySelectorAll('.increment-btn');
-        const decrementBtns = document.querySelectorAll('.decrement-btn');
-        const quantityInputs = document.querySelectorAll('.quantity-input');
+    <!-- <script>
+        
+       
+
+            async function inc(id,count,qty) {
+                const field = document.getElementById('qty-'+id);
+                const cartValue = field.value;
+                const productId = field.getAttribute('product_id');
+                
+            try {
+              const response = await fetch('/cart/inc', {method: 'POST',headers: {'Content-Type': 'application/json'},body: JSON.stringify({ cartValue, productId })});
+              const data = await response.json();
+              
+              updateInputField(data,productId,count,qty);
+            } catch (err) {
+              console.error(err);
+            }
+                }
+                
+                
+
+            async function dec(id,count,qty){
+                const field = document.getElementById('qty-'+id);
+                const cartValue = field.value;
+                const productId = field.getAttribute('product_id');
+                console.log(cartValue);
+                   try {
+                    const response = await fetch('/cart/dec',{method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({cartValue,productId})})
+                    const data =  await response.json();
+                    
+
+                    updateInputField(data,productId,count,qty);
+                    
+                   } catch (err) {
+                    console.error(err);
+                    
+                   }
+                }
+                function updateInputField(data,productId,count,qty){
+                    function add(count,qty){quantity=parseInt(count)+parseInt(qty);console.log("this is from add",quantity);}
+                    data.products.forEach(element => {
+                        if(element._id=productId){console.log("this is data",element)}
+                        
+                        let sum=0;
+                    document.getElementById('qty-'+productId).value=parseInt(qty)+count
+                    document.getElementById("total-"+id).innerHTML=qty*price
+                    document.getElementById('subtotal').innerHTML=sum+(qty*price)
+                     });
+                  
+                         }
+
+                         updateInputField(data,id)
+              
+
+                
+               
+                
 
 
+    </script> -->
 
 
+<script>
+	const setSubtotal=()=>{
+		const itemTotal=document.getElementsByClassName('item-total')
+		let subtotal=0;
+		for (let i = 0; i < itemTotal.length; i++) {
 
-function updateCartQuantity(productId, quantity) {
-  fetch('/cart/dec', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ productId, quantity })
-  })
-  .then(response => response.json())
-  .then(cart => {
-    quantityInputs[productId].value = cart.products[productId].quantity;
-  })
-  .catch(error => console.error(error));
-}
+			subtotal+=Number(itemTotal[i].innerHTML)
+		}
+		document.getElementById('subtotal').innerHTML=subtotal;
+
+	}
+	setSubtotal();
+	
+	function inc(id){
+		
+		$.ajax({
+			url:'/cart/inc',
+			method:"post",
+			data:{id:id},
+			success:function(data){
+				if(data.success){
+					console.log(data);
+					$(`#total-${id}`).text(data.total)
+					
+					$(`#qty-${id}`).text(data?.quantity)
+					
+					setSubtotal();
+				}else{
+					console.log('error');
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				console.error(errorThrown);
+			}
+		})
+	}
+
+	function dec(id) {
+	
+	  var currentQuantity = parseInt($(`#qty-${id}`).text());
+	  if (currentQuantity > 1) {
+		$.ajax({
+		url: "/cart/dec",
+		method: "post",
+		data: { id: id },
+		success: function(data) {
+		  // Handle success response here
+		  console.log(data);
+		  $(`#total-${id}`).text(data.total);
+		  $(`#qty-${id}`).text(data?.quantity);
+		  setSubtotal();
+		  
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+		  // Handle error response here
+		  res.send('error')
+		}
+	  });
+	  }else{
+		$(`#qty-${id}`).text(1);
+	  }
+	  
+	 
+	}
     </script>
     
 
    <%- include('_userfooter') %>
+
+
+   

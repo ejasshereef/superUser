@@ -28,12 +28,10 @@
                         </li>
                         <li class="nav-item submenu dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                <img class="rounded-circle me-lg-2" src="/assets/admin/img/ejas.jpg" alt="" style="width: 25px; height: 25px;">
-                                <span class="d-none d-lg-inline-flex">Ejas Shereef</span>
+                               
+                                <span class="d-none d-lg-inline-flex"><% if (admin) { %><%= admin.name %><% } %></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item"><a href="#" class="nav-link">My Profile</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Settings</a></li>
                                 <li class="nav-item"><a href="/logout" class="nav-link">Log Out</a></li>
                             </ul>
                      </li>

@@ -10,6 +10,7 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const swal = require("sweetalert2");
 const Cartdb = require("../model/cart");
+const Orderdb = require("../model/order");
 
 
 const {TWILIO_SERVICE_SID,TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN}=process.env;
@@ -180,12 +181,16 @@ exports.login = (req, res) => {
       res.redirect("/landingPage");
     }
     const isValid = await bcrypt.compare(password, existingUser.password);
-    if (isValid) {
-      const token = createToken(existingUser._id);
-      res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-      res.redirect("/loadingPage");
-    } else {
-      res.render("landingPage");
+    if(existingUser.status=="Active"){
+      if (isValid) {
+        const token = createToken(existingUser._id);
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.redirect("/loadingPage");
+      } else {
+        res.render("landingPage");
+      }
+    }else{
+      res.render("landingPage")
     }
   });
 };
@@ -198,7 +203,7 @@ exports.admin = async (req, res) => {
     // req.session.admin = email;
     // req.session.authorized = true;
      const adminToken = createToken(admin.email);
-      res.cookie("jwt", adminToken, { httpOnly: true, maxAge: maxAge * 1000 });
+      res.cookie("jwtAdmin", adminToken, { httpOnly: true, maxAge: maxAge * 1000 });
     res.redirect("/dashboard");
   } else {
     res.render("adminSignin", { message: "invalid entry" });
@@ -207,12 +212,9 @@ exports.admin = async (req, res) => {
 
 exports.dashboard = (req, res) => {
   res.setHeader("Cache-Control", "no-cache,no-store, must-revalidate");
-  if (req.session.admin) {
-    res.render("dashboard");
-  } else {
-    console.log("passed to else in get dashboard");
-    res.render("landingPage");
-  }
+  const admin=res.locals.admin
+    res.render("dashboard",{admin});
+
 };
 
 exports.loadingPage = (req, res) => {
@@ -223,10 +225,10 @@ exports.loadingPage = (req, res) => {
 exports.add_brand = async (req, res) => {
   const brandName = req.body.brandName; // Destructure request body
 
-  if (req.session.admin) {
+  
     try {
       const existingUser = await Branddb.findOne({ name: brandName }); // Check if user already exists in the database
-      console.log(existingUser);
+      
       if (existingUser) {
         return res.send("Already Existing User");
       } else {
@@ -242,9 +244,8 @@ exports.add_brand = async (req, res) => {
       console.error(err);
       res.status(500).send("Error registering user");
     }
-  } else {
-    res.render("adminSignin");
-  }
+  
+  
 };
 
 exports.userLogout = (req, res) => {
@@ -253,8 +254,7 @@ exports.userLogout = (req, res) => {
 };
 
 exports.adminLogout = (req, res) => {
-  res.setHeader("Cache-Control", "no-cache,no-store");
-  req.session.destroy();
+  res.cookie("jwtAdmin", "", { maxAge: 1 });
   res.redirect("/admin");
 };
 
@@ -262,7 +262,6 @@ exports.adminLogout = (req, res) => {
 
 exports.create = async (req, res) => {
   const hash = await bcrypt.hash(req.body.password, 10);
-  console.log(req.session.admin);
   if (!req.body) {
     res.send(400).send({ message: "content can not be empty" });
     return;
@@ -299,23 +298,19 @@ const storage = multer.diskStorage({
   },
 });
 
-exports.upload = multer({ storage: storage }).single("image");
+exports.upload = multer({ storage: storage }).array('image',7)
+exports.uploadSingle = multer({ storage: storage }).single('image')
 
 exports.add_product = async (req, res) => {
   try {
     if (!req.body) {
       return res.status(400).send({ message: "Content can not be empty" });
     }
-
-    if (!req.file) {
-      return res.status(400).send({ message: "Please upload an image" });
-    }
-
     const product = new Productdb({
       name: req.body.addName,
       brand: req.body.addBrand,
       description: req.body.addDescription,
-      image: req.file.filename,
+      image: req.files.map((file) => file.filename),
       price: req.body.addPrice,
     });
     const data = await product.save();
@@ -419,18 +414,22 @@ exports.createProduct = async (req, res) => {
     });
 };
 
+
+
 exports.updateProduct = (req, res) => {
   if (!req.body) {
     return res.status(400).send({ message: "data to update cannot be empty" });
   }
   const id = req.params.id;
+  
   Productdb.findByIdAndUpdate(
     id,
     {
-      name: req.body.name,
+      name: req.body.addName,
       brand: req.body.addBrand,
       description: req.body.addDescription,
       price: req.body.addPrice,
+      image:req.files.map((file)=>file.filename)
     },
     { useFindAndModify: false },
     { new: true }
@@ -449,19 +448,25 @@ exports.updateProduct = (req, res) => {
     });
 };
 
-exports.updateUser = (req, res) => {
+exports.update_user = (req, res) => {
   if (!req.body) {
     return res.status(400).send({ message: "data to update cannot be empty" });
   }
   const id = req.params.id;
-  Userdb.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  Userdb.findByIdAndUpdate(id, {
+    name:req.body.name,
+    phone:req.body.phone,
+    email:req.body.email,
+    status:req.body.status,
+    image:req.file.filename
+  }, { useFindAndModify: false },{ new: true })
     .then((data) => {
       if (!data) {
         res.status(404).send({
           message: `cannot update user with $(id).May be user not found`,
         });
       } else {
-        res.send(data);
+        res.redirect('/user-data')
       }
     })
     .catch((err) => {
@@ -582,14 +587,16 @@ exports.product_to_cart = async (req, res) => {
     const userId = res.locals.user._id;
     const product = await Productdb.findById(id).populate("brand");
     let cart=await Cartdb.findOne({userId:userId})
-    const existingCart=await Cartdb.findOne({productId:id})
-   
+    
+    
+    
     if(!product){
       return res.status(404).json({message:"product not found"})
     }
 
     
     if(!cart){
+      
       cart= new Cartdb({
         userId:userId,
         products:[{ 
@@ -597,48 +604,28 @@ exports.product_to_cart = async (req, res) => {
           quantity:qty,
           name:product.name,
           price:product.price,
-          brand:product.brand}],
-         
-        })
+          brand:product.brand,
+          
+          }],
         
-    
+          
+        })
    
     }else{
       const itemIndex=cart.products.findIndex(products => products.productId.equals(product._id))
-      
+     // total=parseInt((cart.products[itemIndex].price)*(cart.products[itemIndex].quantity))
       if(itemIndex === -1){
         cart.products.push({productId:product._id,quantity:qty,name:product.name,price:product.price,brand:product.brand})
+        
+        //cart.subTotal=sum+=cart.products[itemIndex].total
       }else{
         cart.products[itemIndex].quantity += parseInt(qty) 
+        cart.products[itemIndex].total=cart.products[itemIndex].quantity*cart.products[itemIndex].price
       }
       
     }
     await cart.save();
     res.redirect('/cart')
-
-
-    // if(existingCart){
-
-    //   existingCart.quantity +=1;
-    //   await existingCart.save();
-    //   res.redirect("/cart");
-      
-    // else{
-    //   const cart = new Cartdb({
-    //     userId: userId._id,
-    //     products:[{
-    //     productId: products._id,
-    //     quantity: qty,
-    //     name: products.name,
-    //     brand: products.brand.name,
-    //     price: products.price,
-    //     }]
-    //   });
-    //   cart.save(cart).then(() => {
-    //     console.log("this is from else add to cart",cart);
-    //     res.redirect("/cart");
-    //   });
-    // }
 
   } catch (err) {
     res.status(500).send(err.message);
@@ -650,32 +637,39 @@ exports.cart = async (req, res) => {
     const userId = res.locals.user;
     const cart = await Cartdb.findOne({ userId: userId._id }).populate("products.brand");
     
-   
-    
-    res.render("cart", { cart });
+    res.render("cart", { cart});
   } catch (err) {
     res.status(500).send(err.message);
   }
 };
 
 exports.cart_inc = async (req, res) => {
-  const id = req.params.id;
   
   try {
+    
+    const id=req.body.id
     const userId=res.locals.user._id
     let cart = await Cartdb.findOne({userId:userId})
     
     const itemIndex=cart.products.findIndex(products => products._id.equals(id))
-    //console.log("this is from cart inc",itemIndex);
+   
     if (!cart) {
       return res.status(404).send("Cart item not found");
     }
 
     cart.products[itemIndex].quantity += 1;
 
-    await cart.save();
 
-    res.redirect("/cart");
+    await cart.save();
+    const quantity=cart.products[itemIndex].quantity
+    const total=cart.products[itemIndex].quantity*cart.products[itemIndex].price
+
+    res.status(200).json({
+      success:true,
+      message:"Quantity update successfully",
+      total:parseInt(total),
+      quantity
+    })
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");
@@ -683,20 +677,32 @@ exports.cart_inc = async (req, res) => {
 };
 
 exports.cart_dec = async (req, res) => {
-  const id = req.params.id;
-
+  
+  
   try {
-    const cartItem = await Cartdb.findById(req.params.id);
+    const id=req.body.id
+    const userId=res.locals.user._id
+    let cart = await Cartdb.findOne({userId:userId});
+    const itemIndex=cart.products.findIndex(products=>products._id.equals(id))
 
-    if (!cartItem) {
+    if (!cart) {
       return res.status(404).send("Cart item not found");
     }
 
-    cartItem.quantity -= 1;
+   if(cart.products[itemIndex].quantity != 1){
+    cart.products[itemIndex].quantity -= 1;
+   }
 
-    await cartItem.save();  
+    await cart.save(); 
+    const quantity=cart.products[itemIndex].quantity
+    const total=cart.products[itemIndex].quantity*cart.products[itemIndex].price
 
-    res.redirect("/cart");
+    res.status(200).json({
+      success:true,
+      message:"Quantity update successfully",
+      total:parseInt(total),
+      quantity
+    })
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");
@@ -773,9 +779,88 @@ exports.add_address = async (req, res) => {
     });
 
     address.save(address).then(() => {
-      res.redirect("/checkout");
+
+      res.redirect("/address");
     });
   } catch (err) {
     res.status(500).send(err.message);
   }
 };
+
+exports.checkoutPayment= async (req,res)=>{
+  try {
+    const payment=req.body.payment
+    const addressId=req.params.id
+    const userId=res.locals.user._id
+    const address=await Addressdb.findById(addressId)
+    const cart=await Cartdb.findOne({userId:userId}).populate("products")
+    if(payment=="cod"){
+      const order=new Orderdb({
+        userId:userId,
+        paymentMode:payment,
+        address:addressId,
+        status:"Processing"
+      })
+
+      for (let i = 0; i < (cart.products).length; i++) {
+        order.products.push({
+          name:cart.products[i].name,
+          price : cart.products[i].price,
+          quantity:cart.products[i].quantity,
+          brand:cart.products[i].brand,
+          total:cart.products[i].quantity*cart.products[i].price
+        })
+        
+      }
+      await order.save()
+   
+      const result = await Cartdb.findOneAndDelete({userId:userId})
+      //const newOrder=await Orderdb.findOne({userId:userId})
+      res.render('confirmedOrder',{order,address})
+    }
+  } catch (err) {
+    res.status(500).send(err.message)
+    
+  }
+}
+
+
+exports.user_profile=async(req,res)=>{
+  const userId=res.locals.user._id
+  const user=await Userdb.findById(userId)
+  const address=await Addressdb.findOne({user:userId})
+  const order=await Orderdb.find({userId:userId}).populate("userId").populate("address").populate("products")
+  res.render("userProfile",{user,address,order})
+}
+
+exports.order_data=async (req,res)=>{
+  const order=await Orderdb.find().populate("userId").populate("address").populate("products")
+  res.render('orderData',{order})
+}
+
+exports.order_details=async (req,res)=>{
+  const id=req.params.id
+ 
+  const order=await Orderdb.findById(id).populate("userId").populate("address").populate("products").populate("products.brand")
+  
+  res.render('orderDetails',{order})
+}
+
+exports.cancel_order=async (req,res)=>{
+  const id=req.params.id
+  let order=await Orderdb.findByIdAndUpdate(id,{status:"Cancelled"},{useFindAndModify:false},{new:true}).populate("userId").populate("address").populate("products").populate("products.brand")
+  res.redirect('/order-details/'+id)
+  //res.render('orderDetails',{order})
+}
+
+exports.admin_order_details=async(req,res)=>{
+  const id=req.params.id
+  const order=await Orderdb.findById(id).populate("userId").populate("address").populate("products").populate("products.brand")
+  res.render('adminOrderDetails',{order})
+}
+
+exports.change_order_status=async (req,res)=>{
+  const id=req.params.id
+  const order=await Orderdb.findByIdAndUpdate(id,{status:req.body.status},{useFindAndModify:false},{new:true})
+  res.redirect('/order-details/'+id)
+}

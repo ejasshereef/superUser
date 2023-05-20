@@ -75,6 +75,7 @@
                                     <tr>
                                         <th scope="col">ID</th>
                                         <th scope="col">Name</th>
+                                        <th scope="col">Image</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Phone No</th>
                                         <th scope="col">Status</th>
@@ -84,13 +85,21 @@
                                 </thead>
                                 <tbody>
 
-                                    <% for(var i=0;i<users.length;i++){ %>
+                                    
+                                       <% if (users) { %>
+                                        
+                                            <% for( let i = 0; i <users.length; i++ ) { %>
+                                            
+                                           
                                         <tr>
                                             <td>
                                                 <%= i+1 %>
                                             </td>
                                             <td>
                                                 <%=users[i].name %>
+                                            </td>
+                                            <td>
+                                                <img src="<%= users[i].image %>"  alt="" style="width: 100px;">
                                             </td>
                                             <td>    
                                                 <%=users[i].email %>
@@ -101,6 +110,7 @@
                                             <td>
                                                 <%=users[i].status %>
                                             </td>
+                                            
                                             <td>
                                                 <a href="/update-user?id=<%= users[i]._id%>"
                                                     class="btn border-shadow update">
@@ -114,6 +124,8 @@
                                             </td>
                                         </tr>
                                         <% } %>
+                                       <% } %>
+                                       
 
                                 </tbody>
                             </table>

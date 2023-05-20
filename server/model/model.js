@@ -18,8 +18,12 @@ let userSchema=new mongoose.Schema({
     },
     status:{
         type:String,
+        default:"Active"
         
     },
+    image:{
+        type:String
+     },
     password:{
         type:String,
         required:true

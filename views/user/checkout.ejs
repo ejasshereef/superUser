@@ -46,7 +46,7 @@
                             <h5>Pincode:<%= address.postcode %></h5>
                             <h5><%= address.email %></h5>
                             <h5>Ph:<%= address.phone %></h5></label>
-                            <% } %>
+                           
                             
                             
                     </div>
@@ -73,12 +73,12 @@
                                 <li><a href="#">Total <span><%= sum+20 %></span></a></li>
                             </ul>
                             <% } %> 
-                           <form  class="" action="">
+                           <form  class="" action="/checkout/<%= address._id %>" method="post">
                             <div class="container ">
                                 <div class="row ">
                                     <div class="payment_item col-md-12">
                                         <div class="radion_btn">
-                                            <input type="radio" id="f-option5" name="selector">
+                                            <input type="radio" id="f-option5" name="payment" value="cod">
                                             <label for="f-option5">Cash On Delivery</label>
                                             <div class="check"></div>
                                         </div>
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="payment_item col-md-12 ">
                                         <div class="radion_btn">
-                                            <input type="radio" id="f-option6" name="selector">
+                                            <input type="radio" id="f-option6" name="payment" value="rpay">
                                             <label for="f-option6">Paypal </label>
                                             <img src="/assets/img/product/card.jpg" alt="">
                                             <div class="check"></div>
@@ -113,6 +113,7 @@
             </div>
         </div>
     </section>
+    <% } %>
     <!--================End Checkout Area =================-->
 
     <!-- start footer Area -->

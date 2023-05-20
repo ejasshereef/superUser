@@ -1,6 +1,6 @@
 /********** Template CSS **********/
 :root {
-    --primary: #ffbb00;
+    --primary: #ff0019;
     --light: #F3F6F9;
     --dark: #191C24;
 }
@@ -14,7 +14,7 @@
 }
 
 .fa-hashtag ,h3 {
-    color: #ffbb00;
+    color: #ff0019;
 }
 
 
@@ -41,7 +41,7 @@
 
 .btn.btn-primary {
     color: #FFFFFF;
-    background-color: orange;
+    background-color: #ff0019;
 }
 
 .btn-square {

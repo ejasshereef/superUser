@@ -1,6 +1,6 @@
 const axios=require('axios')
-var Branddb=require("../model/BrandModel");
-var Productdb=require('../model/productModel')
+const Branddb=require("../model/BrandModel");
+const Productdb=require('../model/productModel')
 
 exports.signup_page=(req, res) => {
   res.render('registration');
@@ -30,15 +30,10 @@ exports.login_otp_page=(req,res)=>{
 exports.productPage=(req,res)=>{
   axios.get('http://localhost:3000/products')
   .then(function(response){
-    // console.log(response.data);
-    if(req.session){
-        console.log(req.session.authorized);
-        
-         // res.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
-          res.render('productData',{products:response.data})
-        }
-      })
-      .catch(err=>{
+    
+    res.render('productData',{products:response.data})
+    
+  }).catch(err=>{
         res.send(err)
       })
 }
@@ -46,12 +41,9 @@ exports.productPage=(req,res)=>{
 exports.userPage=(req,res)=>{
   axios.get('http://localhost:3000/users')
   .then(function(response){
-    // console.log(response.data);
-    if(req.session){
-        console.log(req.session.authorized);
-         // res.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
-          res.render('userData',{users:response.data})
-        }
+     
+    res.render('userData',{users:response.data})
+   
       })
       .catch(err=>{
         res.send(err)
@@ -84,7 +76,7 @@ exports.update_user=(req,res)=>{
      .then(function(userdata){
        if(req.session){
         //res.setHeader("Cache-Control", "no-cache,no-store");
-        res.render('updateUser',{user:userdata.data}) 
+        res.render('updateUser',{users:userdata.data}) 
        }      
      })
     .catch(err=>{
@@ -93,17 +85,25 @@ exports.update_user=(req,res)=>{
 }
 
 exports.update_prouduct=async(req,res)=>{
+  // const brand=await Branddb.find()
+  // axios.get('http://localhost:3000/products',{params:{id:req.query.id}})
+  //   .then(function(productdata){
+  //     console.log("this is from update product",productdata.data.brand);
+  //     console.log(brand[2]._id);
+  //      res.setHeader("Cache-Control", "no-cache,no-store");
+  //      res.render('updateProduct',{products:productdata.data,brand}) 
+          
+  //   })
+  //  .catch(err=>{
+  //      res.send(err)
+  //  })
+  const id=req.query.id
   const brand=await Branddb.find()
-  axios.get('http://localhost:3000/products',{params:{id:req.query.id}})
-    .then(function(productdata){
-      if(req.session){
-       res.setHeader("Cache-Control", "no-cache,no-store");
-       res.render('updateProduct',{products:productdata.data,brand}) 
-      }      
-    })
-   .catch(err=>{
-       res.send(err)
-   })
+  const products=await Productdb.findById(id).populate("brand")
+  console.log("this is from update products",products);
+  console.log("this is from update products",brand);
+  res.render('updateProduct',{products,brand})
+  
 }
 
 exports.allProduct=async(req,res)=>{
