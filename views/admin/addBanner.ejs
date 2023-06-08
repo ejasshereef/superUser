@@ -1,0 +1,55 @@
+<%- include('_userheader') %>
+<%- include('_header') %>
+
+
+
+	 <!-- sidebar -->
+	 <%- include('_sideBar') %>
+     <!-- sidebar -->
+
+	
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+				<%- include('_navBar') %>
+			<div class="row">
+				<!-- <div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="/assets/img/login.jpg" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>Enjoy our offers and privilege by registering on our websit and loggin in </p>
+							<a class="primary-btn" href="registration.html">Create an Account</a>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-lg-12">
+					<div class="login_form_inner">
+						<h3>Add New Product</h3>
+						<form class="row login_form" action="/add-banner" method="post" id="contactForm" enctype="multipart/form-data" >
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="name" name="name" placeholder="Banner Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Banner Name'">
+							</div>
+							
+							<div class="col-md-12 form-group">
+								<input type="file" multiple class="form-control" id="image" name="image" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
+							</div>
+
+							
+							<div class="col-md-12 form-group mb-5">
+								<button type="submit" value="submit" class="btn-secondary">Add Banner</button>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+	
+	
+	
+
+<%- include('_footer') %>
+	<%- include('_userfooter') %>

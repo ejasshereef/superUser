@@ -7,7 +7,14 @@ require('dotenv').config();
 const session=require('express-session')
 const cookieParser=require('cookie-parser')
 const jwt=require('jsonwebtoken')
-const twilioRouter=require('./server/routes/router');
+const twilioRouter=require('./server/routes/adminRouter');
+const paypal=require('paypal-rest-sdk')
+
+const {PAYPAL_CLIENT_ID,PAYPAL_CLIENT_SECRET}=process.env
+
+
+
+
 
 
 const connectDB=require('./server/database/connection')
@@ -20,7 +27,7 @@ const {PORT}=process.env;
 const port=3000||PORT
 
 //------log requests----//
- //app.use(morgan('tiny'))
+//  app.use(morgan('tiny'))
 
 
 //-----mongoDB connection-----//
@@ -43,6 +50,7 @@ app.use(bodyparser.json())
 
 //--------load assets-------//
 app.use(express.static(path.join(__dirname,'public')))
+app.use('/invoice',express.static(path.join(__dirname,'/project/superUser')))
 app.use('/js',express.static(path.resolve(__dirname,"assets/js")))
 
 //upload file show
@@ -55,6 +63,14 @@ app.use(express.static('uploads'))
 app.use('/su_sms',twilioRouter)
 
 
+//------paypal--------//
+paypal.configure({
+  'mode':'sandbox',
+  'client_id':PAYPAL_CLIENT_ID,
+  'client_secret':PAYPAL_CLIENT_SECRET
+  
+})
+
 //----set view engine-----//
 app.set('view engine','ejs')
 app.set('views', [
@@ -63,7 +79,10 @@ app.set('views', [
   ]);
 
 //app.get('*',checkUser)
-app.use(require('./server/routes/router'))
+app.use(require('./server/routes/adminRouter'))
+app.use(require('./server/routes/userRouter'))
+
+
 
 app.listen(port,()=>{console.log(`listening to http://localhost:${port}`)})
 

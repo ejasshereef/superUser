@@ -48,6 +48,7 @@
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                              aria-expanded="false"><%= user.name %></a>
                             <ul class="dropdown-menu">
+                                <li class="nav-item "><a class="nav-link" href="/wallet-history">Wallet Balance  <%= wallet.amount %> </a></li>
                                 <li class="nav-item "><a class="nav-link" href="/user-profile">Profile</a></li>
                                 <li class="nav-item "><a class="nav-link" href="/user-logout">Logout</a></li>
                                
@@ -69,9 +70,20 @@
         <div class="container">
             <form class="d-flex justify-content-between">
                 <input type="text" class="form-control" id="search_input" placeholder="Search Here">
-                <button type="submit" class="btn"></button>
+                <button  onclick="search()" class="btn"></button>
                 <span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
             </form>
         </div>
     </div>
 </header>
+
+
+<script>
+  function search(){
+    $.ajax({
+        url:'/search',
+        method:'post',
+        data{}
+    })
+  }
+</script>

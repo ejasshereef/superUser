@@ -17,7 +17,8 @@ let productSchema=new mongoose.Schema({
         required:true
     },
     image:[{
-       type:String
+       type:String,
+       contentType:String
     }],
     price:{
         type:Number,
@@ -29,6 +30,8 @@ let productSchema=new mongoose.Schema({
     }
    
 })
+
+productSchema.index({'$**':'text'})
 
 
 const Productdb=mongoose.model('productdb',productSchema)

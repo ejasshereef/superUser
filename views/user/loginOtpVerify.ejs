@@ -101,7 +101,10 @@
 								<div id="msg" class="alert alert-danger">OTP send succesfully </div>
 							 <% } %>  
 							 <% setTimeout %>
-                            
+                             <div class="col-md-12 form-group">
+								<span id="countdown"></span>
+							</div>
+
                             <div class="col-md-12 form-group">
 								<input type="tel" class="form-control"  name="otp" placeholder="OTP" onfocus="this.placeholder = ''" onblur="this.placeholder = 'OTP'">
 							</div>
@@ -220,6 +223,21 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="/assets/js/gmaps.min.js"></script>
 	<script src="/assets/js/main.js"></script>
+
+	<script>
+		let timeleft = 60;
+	  let downloadTimer = setInterval(function(){
+		if(timeleft <= 0){
+		  clearInterval(downloadTimer);
+		  document.getElementById("countdown").innerHTML = "Time is Over";
+		  window.location.href = '/login-otp'; 
+		} else {
+		  document.getElementById("countdown").innerHTML = timeleft + " seconds remaining";
+		}
+		timeleft -= 1;
+	  }, 1000);
+	 
+	  </script>
 
     <script> setTimeout(() => {
         document.getElementById("msg").style.display='none'

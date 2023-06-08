@@ -24,19 +24,29 @@
 	</section>
 	<!-- End Banner Area -->
 
+	
 	<!--================Single Product Area =================-->
 	<div class="product_image_area">
 		<div class="container">
 			<div class="row s_product_inner">
 				<div class="col-lg-6">
 					<div class="s_Product_carousel">
-						<% products.image.forEach(element => { %>
-							<div class="single-prd-item">
-								<img class="img-fluid" src="<%=element %>" alt="">
-							</div>
+						<% products.image.forEach((element) => { %>
+							<div>
+							<a  class="single-prd-item magnifier-thumb-wrapper" href="#">
+									<img id="thumb"  class="img-fluid " src="<%=element %>" alt="">
+							</a>
+							<div class="magnifier-preview" id="preview" style="width: 200px; height: 133px"></div>
+						</div>
 						<% }) %>
-						
 					</div>
+					<!-- <button type="button" onclick="zoomin()">
+						Zoom-In
+					</button>
+					  
+					<button type="button" onclick="zoomout()"> 
+						Zoom-Out
+					</button> -->
 				</div>
 				<div class="col-lg-5 offset-lg-1">
 					<div class="s_product_text">
@@ -624,5 +634,23 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		</div>
 	</footer>
 	<!-- End footer Area -->
+
+	
+
+	<script type="text/javascript">
+        function zoomin() {
+			var images = document.querySelectorAll('[id^="img"]');
+    		images.forEach(image => {
+     		 var currWidth = image.clientWidth;
+     		 image.style.width = (currWidth + 100) + "px";
+    		});
+        }
+          
+        function zoomout() {
+            var GFG = document.getElementById("img");
+            var currWidth = GFG.clientWidth;
+            GFG.style.width = (currWidth - 100) + "px";
+        }
+    </script>
 
 	<%- include('_userfooter') %>

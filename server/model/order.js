@@ -7,11 +7,15 @@ let orderSchema=new mongoose.Schema({
         ref: "userdb"
       },
       products:[{name:{type:String},quantity:{type:Number},brand:{type:String},total:{type:Number},price:{type:Number}}],
-      paymentMode:{type:String,required:true},
+      paymentMode:{type:String},
+      primaryPaid:{type:Number},
+      secondaryPaymentMode:{type:String},
+      secondaryPaid:{type:Number},
       address:{type:mongoose.Schema.Types.ObjectId,ref:"addressdb"},
       status:{type:String},
+      coupon:{type:String},
       subTotal:{type:Number},
-      
+        
       modifiedOn: {
         type: Date,
         default: Date.now

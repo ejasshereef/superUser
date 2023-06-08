@@ -1,0 +1,67 @@
+<%- include('_userheader') %>
+<%- include('_header') %>
+
+
+
+	 <!-- sidebar -->
+	 <%- include('_sideBar') %>
+     <!-- sidebar -->
+
+	
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+				<%- include('_navBar') %>
+			<div class="row">
+				<!-- <div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="/assets/img/login.jpg" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>Enjoy our offers and privilege by registering on our websit and loggin in </p>
+							<a class="primary-btn" href="registration.html">Create an Account</a>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-lg-12">
+					<div class="login_form_inner">
+						<h3>Create New Coupon</h3>
+						<form class="row login_form" action="/add-coupon" method="post" id="contactForm"  >
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control"  name="name" placeholder="Coupon Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Coupon Name'">
+							</div>
+                            <div class="col-md-12 form-group">
+                                <input type="text" class="form-control"  name="codeName" placeholder="Coupon Code" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Coupon Code'">
+                            </div>
+							<div class="col-md-12 row form-group">
+								<label class="col-md-5 mt-3 ml-2" for="status">Status:</label>
+                                    <select class="col-md-6" name="status" >	
+                                      <option value="Active">Active</option>
+                                      <option value="Inactive">Inactive</option>
+                                     
+                                    </select>
+							</div>
+							
+							
+                            <div class="col-md-12 form-group">
+								<input type="tel" class="form-control"  name="discount" placeholder="Discount" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Discount'">
+							</div>
+
+							
+							<div class="col-md-12 form-group mb-5">
+								<button type="submit" value="submit" class="btn-secondary">Create Coupon</button>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+	
+	
+	
+
+<%- include('_footer') %>
+	<%- include('_userfooter') %>

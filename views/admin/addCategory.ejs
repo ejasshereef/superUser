@@ -1,0 +1,160 @@
+<%- include('_userheader') %>
+<%- include('_header') %>
+
+	
+	
+	
+	 <!-- sidebar -->
+	<%- include('_sideBar') %>
+     <!-- sidebar -->
+	
+
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<%- include('_navBar') %>
+			<div class="row">
+				<!-- <div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="/assets/img/login.jpg" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>Enjoy our offers and privilege by registering on our websit and loggin in </p>
+							<a class="primary-btn" href="registration.html">Create an Account</a>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>Add New Brnad Name</h3>
+						<form class="row login_form" action="/add-brand" method="post" id="contactForm" >
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="brandName" name="brandName" placeholder="Brand Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Brand Name'">
+							</div>
+                           
+							<div class="col-md-12 form-group mb-5">
+								<button type="submit" value="submit" class="btn-secondary">Add Brand Name</button>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+				
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<% if (msg) { %>
+							<h3 id="msg"><%= msg %></h3>
+						<% } %>
+						<h3>Existing Brand Name</h3>
+						<form class="row login_form"  id="contactForm" >
+							<div class="col-md-12 form-group">
+								<table class="tabel  float-left">
+									<thead >
+										<tr>
+											<th scope="col"> Brand Name</th>
+											<th scope="col">Edit</th>
+										</tr>
+									</thead>
+									<tbody >
+										<% if (brand) { %>
+											<% brand.forEach(element => { %>
+												<tr >
+													<td > <%= element.name %></td>
+													
+													<td ><a href="/delete-brand/<%= element._id%>" class="btn border-shadow delete" >
+														<span class="text-gradient"><i class="fa fa-trash" aria-hidden="true"></i></span>
+													</a></td>
+													
+												</tr>
+												<% }) %>
+										<% } %>
+									</tbody>
+								</table>
+							</div>
+                           
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<!-- <div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="/assets/img/login.jpg" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>Enjoy our offers and privilege by registering on our websit and loggin in </p>
+							<a class="primary-btn" href="registration.html">Create an Account</a>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>Add New Category</h3>
+						<form class="row login_form" action="/add-category" method="post" id="contactForm" >
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control"  name="categoryName" placeholder="Category Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Category Name'">
+							</div>
+                           
+							<div class="col-md-12 form-group mb-5">
+								<button type="submit" value="submit" class="btn-secondary">Add Category Name</button>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<% if (catMsg) { %>
+							<h3 id="msg"><%= catMsg %></h3>
+						<% } %>
+						<h3>Existing Category</h3>
+						<form class="row login_form"  id="contactForm" >
+							<div class="col-md-12 form-group">
+								<table class="tabel  float-left">
+									<thead >
+										<tr>
+											<th scope="col"> Category Name</th>
+											<th scope="col">Edit</th>
+										</tr>
+									</thead>
+									<tbody >
+										<% if (category) { %>
+											<% category.forEach(element => { %>
+												<tr >
+													<td > <%= element.name %></td>
+													
+													<td ><a href="/delete-category/<%= element._id%>" class="btn border-shadow delete" >
+														<span class="text-gradient"><i class="fa fa-trash" aria-hidden="true"></i></span>
+													</a></td>
+													
+												</tr>
+												<% }) %>
+										<% } %>
+									</tbody>
+								</table>
+							</div>
+                           
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+
+	<script>
+		 setTimeout(() => {
+        document.getElementById("msg").style.display='none'
+    },2000);
+	</script>
+
+<%- include('_footer') %>
+	<%- include('_userfooter') %>

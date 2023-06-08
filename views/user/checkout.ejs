@@ -31,24 +31,46 @@
             <div class="billing_details">
                 <div class="row">
                     <div class="col-lg-6 mt-2 ">
-                        <h3 class="mt-4">Billing Details</h3>
-                      <% if (address) { %>
+                        <% if (address) { %>
+                            <div class="col-md-12">
+                               <h3 class="mt-4" style="color: brown;">Billing Details</h3>
+                             <!-- <input value="address" class="pixel-radio" type="radio" id="apple" name="address"><label for="address"> -->
+                                <h5><%= address.firstName %></h5>
+                                <h5><%= address.addressLine1 %></h5>
+                                <h5><%= address.addressLine2 %></h5>
+                                <h5><%= address.district %>,<%= address.state %>,<%= address.country %></h5>
+                                <h5></h5>
+                                <h5></h5>
+                                <h5>Pincode:<%= address.postcode %></h5>
+                                <h5><%= address.email %></h5>
+                                <h5>Ph:<%= address.phone %></h5></label>
+                                <hr class="divider">
+                              
+                           </div>
+                           <div class="col-md-12" >
+                               <h3 style="color: brown;">Coupon for You</h3>
+                            <% if (coupon) { %>
+                               <% for( let i = 0; i < coupon.length; i++ ) { %>
+                                <h3><%= i+1 %>.<%= coupon[i].name %> coupon code: <a href="#"><%= coupon[i].codeName %></a> </h3>
+                               <% } %>  
+                            <% } %>
+                            <form  class="" action="/checkout/<%= address._id %>" method="post">
+                            <div class="col-md-6 form-group">
+								<input type="text" class="form-control" id="coupon" name="coupon" placeholder="Enter Coupon Code" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Coupon Code'">
+							</div>
+                            <div class="col-md-12 form-group ">
+                                <% if (cart) { %>
+                                    <% let sum=0 %>
+                                    <% (cart.products).forEach(element => { %>
+                                        <% sum = sum+(element.price*element.quantity); %>
+                                        <% }) %>
+                                        <a  onclick="addCoupon(document.getElementById('coupon'),'<%=sum %>','<%= wallet.amount %>','<%=user.couponUsed%>')"  class="primary-btn">Apply</a>
+                                        <a  onclick="walletPayment('<%=sum %>','<%= wallet.amount %>')"  class="primary-btn">Remove</a>
+                                        <% } %>
+							</div>
 
-                        
-              
-                        <input value="address" class="pixel-radio" type="radio" id="apple" name="address"><label for="address">
-                            <h5><%= address.firstName %></h5>
-                            <h5><%= address.addressLine1 %></h5>
-                            <h5><%= address.addressLine2 %></h5>
-                            <h5><%= address.district %>,<%= address.state %>,<%= address.country %></h5>
-                            <h5></h5>
-                            <h5></h5>
-                            <h5>Pincode:<%= address.postcode %></h5>
-                            <h5><%= address.email %></h5>
-                            <h5>Ph:<%= address.phone %></h5></label>
-                           
-                            
-                            
+                            <% } %>
+                           </div>
                     </div>
                     <div class="col-lg-6 ">
                         <div class="order_box">
@@ -67,54 +89,71 @@
                                      <% }) %>
                                      
                             </ul>
-                            <ul class="list list_2">
-                                <li><a href="#">Subtotal <span><%= sum %></span></a></li>
-                                <li><a href="#">Shipping <span>Flat rate: 20.00</span></a></li>
-                                <li><a href="#">Total <span><%= sum+20 %></span></a></li>
-                            </ul>
-                            <% } %> 
-                           <form  class="" action="/checkout/<%= address._id %>" method="post">
                             <div class="container ">
                                 <div class="row ">
-                                    <div class="payment_item col-md-12">
-                                        <div class="radion_btn">
-                                            <input type="radio" id="f-option5" name="payment" value="cod">
-                                            <label for="f-option5">Cash On Delivery</label>
-                                            <div class="check"></div>
-                                        </div>
-                                        <p>Please send a check to Store Name, Store Street, Store Town, Store State / County,
-                                            Store Postcode.</p>
-                                    </div>
-                                    <div class="payment_item col-md-12 ">
-                                        <div class="radion_btn">
-                                            <input type="radio" id="f-option6" name="payment" value="rpay">
-                                            <label for="f-option6">Paypal </label>
-                                            <img src="/assets/img/product/card.jpg" alt="">
-                                            <div class="check"></div>
-                                        </div>
-                                        <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
-                                            account.</p>
-                                    </div>
-                                    <!-- <div class="creat_account">
-                                        <input type="checkbox" id="f-option4" name="selector" required="true">
-                                        <label for="f-option4">I’ve read and accept the </label>
-                                        <a href="#">terms & conditions*</a>
-                                    </div> -->
-                                    <div class="button col-md-12">
-                                        <button class="primary-btn">Proceed to Payment</button>
-        
-                                    </div>
-                                </div>
-                            </div>
-                           </form>
+                            <ul class="list list_2">
+                                <li><a href="#">Subtotal <span><%= sum %></span></a></li>
+                                <li><a href="#">Shipping <span>00.00</span></a></li>
+                              
+                                     
+                                        <% if (wallet) { %>
+                                            
+                                        <div class="payment_item col-md-12">
+                                           
+                                                <div class="radion_btn">
+                                                        <div  class="container">
+                                                            <div class="row">
+                                                                <input onclick="walletPayment('<%=sum %>','<%= wallet.amount %>')"  type="checkbox" id="f-option9" name="secondaryPayment" value="wallet">
+                                                                 <input hidden name="sum" value="<%= sum %>" >
+                                                                <label class="col-md-10" for="f-option9"> Wallet  </label>
+                                                                <h6 id="walletAmout" ><%= wallet.amount %></h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <p>You can use amount from the wallet </p>
+                                                <div class="radion_btn">
+                                                    <input type="checkbox"  onclick="subtotal('<%=sum %>')" id="f-option5" name="primaryPayment" value="cod">
+                                                    <label for="f-option5">Cash On Delivery</label>
+                                                    
+                                                </div>
+                                                <p>Please send a check to Store Name, Store Street, Store Town, Store State / County,
+                                                    Store Postcode.</p>
+                                                </div>
+                                                <div class="payment_item col-md-12 ">
+                                                    <div class="radion_btn">
+                                                        <input type="checkbox"  onclick="walletPayment('<%=sum %>','<%= wallet.amount %>')" id="f-option6" name="primaryPayment" value="paypal">
+                                                        <label for="f-option6">Paypal </label>
+                                                        <img src="/assets/img/product/card.jpg" alt="">
+                                                       
+                                                    </div>
+                                                    <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
+                                                        account.</p>
+                                                    </div>
+                                                    <!-- <div class="creat_account">
+                                                        <input type="checkbox" id="f-option4" name="selector" required="true">
+                                                        <label for="f-option4">I’ve read and accept the </label>
+                                                        <a href="#">terms & conditions*</a>
+                                                    </div> -->
+                                                    <li><a href="#">Total <span id="subtotal" value=""></span><span><i class="fa fa-inr" aria-hidden="true"></i></span></a></li>
+                                                </ul>
+                                                    <div class="button col-md-12">
+                                                        <button type="submit" class="primary-btn">Proceed to Payment</button>
+                                                        
+                                                    </div>
+                                                </div>
+                                     </div>
+                                        </form>
+                                        <% } %>
+                               <% } %> 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <% } %>
+   
     <!--================End Checkout Area =================-->
+
 
     <!-- start footer Area -->
     <footer class="footer-area section_gap">
@@ -198,6 +237,88 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         </div>
     </footer>
     <!-- End footer Area -->
+
+
+    <script>
+        function subtotal(sum){
+            document.getElementById('subtotal').innerHTML=sum
+        }
+
+       function walletPayment(sum,wallet){
+           
+           console.log(wallet,sum);
+           if(parseInt(wallet) >= parseInt(sum) ){
+            let walletAmout=wallet-sum
+            let output= 0
+           document.getElementById('subtotal').innerHTML=output
+           document.getElementById('walletAmout').innerHTML=walletAmout
+        }else{
+           let output= sum-wallet
+           document.getElementById('subtotal').innerHTML=output
+        }
+       
+           }
+
+           function addCoupon(coupon, sum, wallet, couponUsed) {
+          fetch('/coupon',{method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({coupon:coupon.value})})
+         
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log(data);
+            if(coupon.value != "first10" && coupon.value != "next20"){
+                console.log("his is",coupon.value);
+                alert("use valid coupon")
+             }
+            if(coupon.value === "first10"){
+                alert("using first 10% coupon")
+              let output=sum-(10*sum)/100
+              document.getElementById('subtotal').innerHTML=output
+             }
+             if(coupon.value === "next20"){
+               alert("using next 20% coupon")
+              let output=sum-(20*sum)/100
+              document.getElementById('subtotal').innerHTML=output
+             }
+               
+          }else{
+            alert("coupon already used once")
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+
+        function removeCoupon(){
+            if(coupon.value){
+           
+           if(coupon.value === "first10"){
+              
+              let output=sum-(10*sum)/100
+              document.getElementById('subtotal').innerHTML=output
+             }
+             if(coupon.value === "next20"){
+               
+              let output=sum-(20*sum)/100
+              document.getElementById('subtotal').innerHTML=output
+             }  
+       
+    }
+        }
+
+          
+    </script>
+
+    <script>
+      
+    </script>
+
+
+
+
+
 
 
    <%- include('_userfooter') %>

@@ -59,7 +59,7 @@
                              
                                 <% array.forEach(function(array) { %>
                                     <div class="single-product col-lg-4 col-md-6 ">
-                                        <img class="img-fluid" src=<%= array.image %> alt="">
+                                        <img class="img-fluid" src=<%= array.image[0] %> alt="">
                                         <div class="product-details">
                                             <h5><%= array.brand.name %></h5>
                                             <a href="/product-detail?id=<%= array._id%>"><h6><%= array.description %></h6></a>
@@ -71,7 +71,7 @@
         
                                                 <div class="row">
                                                     <div class="col-md-6" ></div>
-                                                    <a href="" class="col-lg-3 social-info">
+                                                    <a href="/add-to-cart/<%= array._id %>" class="col-lg-3 social-info">
                                                         <span class="ti-bag"></span>
                                                         <!-- <p class="hover-text">add to bag</p> -->
                                                     </a>

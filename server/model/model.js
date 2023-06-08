@@ -18,12 +18,13 @@ let userSchema=new mongoose.Schema({
     },
     status:{
         type:String,
-        default:"Active"
+        default:"Unblocked"
         
     },
     image:{
         type:String
      },
+    couponUsed:[{type:String}],
     password:{
         type:String,
         required:true

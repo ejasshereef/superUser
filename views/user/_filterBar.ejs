@@ -1,0 +1,39 @@
+<div class="filter-bar d-flex flex-wrap align-items-center">
+					
+    <div class="sorting mr-auto">
+        <form action="/all-product" method="GET">
+            <input type="text" id="search" name="search" placeholder="Enter search keyword" value="<%= search %>">
+          </form>
+    </div>
+
+    <div class="sorting mr-auto">
+        <form action="">
+            
+            <select id="sort" name="sort">
+              <option value="">None</option>
+              <option value="price_asc" <%= sort === 'price_asc' ? 'selected' : '' %>>Price (Low to High)</option>
+              <option value="price_desc" <%= sort === 'price_desc' ? 'selected' : '' %>>Price (High to Low)</option>
+            </select>
+            </select>
+            <button  class="btn ml-1"  type="submit">Sort</button>
+        </form>
+    </div>
+    <div class="pagination">
+        
+        <% if (currentPage > 1) { %>
+          <a href="/all-product?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= search %>&sort=<%= sort %>&brand=<%= brand %>">Previous</a>
+        <% } %>
+    
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <% if (i === currentPage) { %>
+            <a href=""><%= i %></a>
+          <% } else { %>
+            <a href="/all-product?page=<%= i %>&limit=<%= limit %>&search=<%= search %>&sort=<%= sort %>&brand=<%= brand %>"><%= i %></a>
+          <% } %>
+        <% } %>
+    
+        <% if (currentPage < totalPages) { %>
+          <a href="/all-product?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= search %>&sort=<%= sort %>&brand=<%= brand %>">Next</a>
+        <% } %>
+      </div>
+</div>

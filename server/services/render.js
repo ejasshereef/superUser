@@ -14,9 +14,7 @@ exports.login_page=(req,res)=>{
   res.render('login')
 }
 
-exports.add_brand=(req,res)=>{
-  res.render('addBrand')
-}
+
 
 exports.login_otp_page=(req,res)=>{
   res.render('loginOtp')
@@ -31,7 +29,7 @@ exports.productPage=(req,res)=>{
   axios.get('http://localhost:3000/products')
   .then(function(response){
     
-    res.render('productData',{products:response.data})
+    res.render('productData',{activeLink:'product-data',products:response.data})
     
   }).catch(err=>{
         res.send(err)
@@ -42,7 +40,7 @@ exports.userPage=(req,res)=>{
   axios.get('http://localhost:3000/users')
   .then(function(response){
      
-    res.render('userData',{users:response.data})
+    res.render('userData',{activeLink:'user-data',users:response.data})
    
       })
       .catch(err=>{
@@ -64,7 +62,7 @@ exports.add_product=(req,res)=>{
    //res.setHeader("Cache-Control", "no-cache,no-store");
     // console.log(req.session.admin);
        Branddb.find({}).exec()
-      .then(brand=>{res.render('addProduct',{brand})})
+      .then(brand=>{res.render('addProduct',{activeLink:'add-product',brand})})
     
   }
     
@@ -100,80 +98,77 @@ exports.update_prouduct=async(req,res)=>{
   const id=req.query.id
   const brand=await Branddb.find()
   const products=await Productdb.findById(id).populate("brand")
-  console.log("this is from update products",products);
-  console.log("this is from update products",brand);
-  res.render('updateProduct',{products,brand})
+  res.render('updateProduct',{activeLink:'update-product',products,brand})
+  
+}
+exports.test=async(req,res)=>{
+ 
+ const product=await Productdb.find(req.query)
+ 
   
 }
 
 exports.allProduct=async(req,res)=>{
-  try {
-    // const page=parseInt(req.query.page)-1||0;
-    // const limit=parseInt(req.query.limit)||5;
-    // const search=req.query.search||'';
-    // let sort=req.query.sort||'rating';
-    // let brand=req.query.brand||'All';
-    // const brandOptions=[
-    //   'Adidas',
-    //   'Nike',
-    //   'New Balance'
-    // ]
-    // brand==='All'
-    //  ? (brand=[...brandOptions])
-    //  : (brand=req.query.brand.split(','));
-    //  req.query.sort?(sort=req.query.sort.split(',')):(sort=[sort])
-
-    //  let sortBy={};
-    //  if(sort[1]){
-    //   sortBy[sort[0]]=sort[1]
-    //  }else{
-    //   sortBy[sort[0]]='asc'
-    //  }
-
-    //  const pdt=await Productdb.find({name:{$regex:search,$options:"i"}})
-    //   .where('name')
-    //   .in({...brand})
-    //   .sort(sortBy)
-    //   .skip(page*limit)
-    //   .limit(limit)
-
-    //   const total=await Productdb.countDocuments({
-    //     brand:{$in:[...brand]},
-    //     name:{$regex:search,$options:"i"},
-    //   })
-
-    //   const response={
-    //     error:false,
-    //     total,
-    //     page:page+1,
-    //     limit,
-    //     brand:brandOptions,
-    //     name,
-    //   }
-
-    //   res.render('allProduct',{pdt})
-
-    const page=req.query.page||0;
-    const limit=parseInt(req.query.limit)||3;
-
+ 
     
+    const page=req.query.page
+    const limit=9;
+    const search=req.query.search||""
+    let sort=req.query.sort
+    const brand=req.query.brand
+   
+    const query = {};
 
-    
 
-    content=Productdb
-    .find()
-    .populate('brand')
-    .sort({brand:1})
-    .skip(page*limit)
-    .limit(limit)
-    
-    .then(content=>{res.render('allProduct',{content})})
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
+    }
 
-    //  Productdb.find().exec()
-    //    .then(content=>{res.render('allProduct',{content})})
-    
+
+    try {
+      const totalProducts = await Productdb.countDocuments(query);
+      const totalPages = Math.ceil(totalProducts / limit);
+      const currentPage = parseInt(page) || 1;
+      const skip = (currentPage - 1) * limit;
+  
+      let sortOptions = {};
+     
+  
+      // Sort by price
+      if (sort === 'price_asc') {
+        sortOptions.price = 1;
+      } else if (sort === 'price_desc') {
+        sortOptions.price = -1;
+      }
+      let array=[]
+  
+      const products = await Productdb.find(query)
+        .populate('brand')
+        .populate('category')
+        .sort(sortOptions)
+        .sort({brand:-1})
+        .skip(skip)
+        .limit(limit)
+        .then(content=>{
+         if(!brand){
+          for (let i = 0; i < content.length; i++) {
+            array[i]=content[i]
+            
+          }
+         }else{
+          for(let i=0;i<content.length;i++){
+            if(content[i].brand.name === brand){
+               array[i]=content[i]
+            }
+          }
+         }
+      res.render('allProduct',{brand, array,search,sort,currentPage,totalPages,limit})
+        })
   } catch (err) {
-    console.log("error is",err);
+    console.log(err);
     res.send(err)
     
   }
@@ -257,7 +252,7 @@ exports.new_balance=async(req,res)=>{
     .limit(limit)
     .then(content=>{
       for(let i=0;i<content.length;i++){
-        if(content[i].brand.name=="New Balance"){
+        if(content[i].brand.name=="NewBalance"){
            array[i]=content[i]
         }
       }

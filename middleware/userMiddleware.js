@@ -1,5 +1,19 @@
 const jwt =require('jsonwebtoken');
 const Userdb = require('../server/model/model');
+const Walletdb = require('../server/model/wallet');
+
+
+
+const wallet=async(req,res,next)=>{
+    const userId=res.locals.user._id
+    const userWallet=await Walletdb.findOne({userId:userId})
+    if(userWallet){
+        res.locals.wallet=userWallet
+        next()
+    }
+
+}
+
 
 const requireAuth=(req,res,next)=>{
     const token=req.cookies.jwt
@@ -116,4 +130,4 @@ const checkExistingAdmin=(req,res,next)=>{
     }
 }
 
-module.exports={requireAuth,checkUser,checkExistingUser,requireAuthAdmin,checkAdmin,checkExistingAdmin}
+module.exports={requireAuth,checkUser,checkExistingUser,requireAuthAdmin,checkAdmin,checkExistingAdmin,wallet}

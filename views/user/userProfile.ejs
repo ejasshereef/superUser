@@ -29,18 +29,30 @@
 				<% if (user) { %>
                     <div class="col-lg-6">
                         <div >
-                            <img class="img-fluid" src="<%= user.image %>" alt="">
+                            <img style="height: 600px;" class="img-fluid" src="<%= user.image %>" alt="">
                         </div>
+						<a class="primary-btn btn mt-3" href="" data-toggle="modal" data-target="#addProfilePic"><% if (user.image) { %>
+						 Update Profile Pic
+						 <% } else { %>
+						 Add Profile Pic
+						<% } %></a>
                     </div>
                     <div class="col-lg-6">
                         <div class="login_form_inner " style="text-align: left;" >
                             
                                 <h2>Name : <span><%= user.name %></span></h2>
                                 <hr class="divider">
+								<h4><a href="/wallet-history">Wallet Balance</a>  : <span><i class="fa fa-inr" aria-hidden="true"></i> <%= wallet.amount %></span></h4>
+								<hr class="divider">
                                 <h4>Phone : <span><%= user.phone %></span></h4>
                                 <h4>Email Id : <span><%= user.email %></span></h4>
                                 <hr class="divider" >
-                                <h4>Status : <span><%= user.status %></span></h4>
+                                <h4>Status : <span <% if (user.status=="Unblocked") { %>
+									style="color:green"
+								   <% } %>
+								   <% if (user.status=="Blocked") { %>
+									style="color:red"
+								   <% } %>><%= user.status %></span></h4>
                                 <hr class="divider" >
                                 <h4>Primary Address : </h4>
                                 <% if (address) { %>
@@ -69,12 +81,9 @@
 						<th scope="col">ID</th>
 						<th scope="col">User Name</th>
 						<th scope="col">Product Name</th>
-						<th scope="col">Quantity</th>
-						<th scope="col">Total</th>
-						<th scope="col">Address</th>
-						<th scope="col">Pincode</th>
+						<th scope="col">Status</th>
 						<th scope="col">Product Details</th>
-						<th scope="col"></th>
+						<th scope="col">Action</th>
 
 					</tr>
 				</thead>
@@ -88,15 +97,45 @@
 							<tr>
 								<td><%= i+1 %></td>
 								
-								<td><%= order[i]._id %></td>
+								<td><%= order[i]._id.toString().slice(-8) %></td>
 								<td><%=order[i].userId.name  %></td>
-								<td><% (order[i].products).forEach(element => { %><%= element.name  %>||<>||<% }) %></td>
-								<td><% (order[i].products).forEach(element => { %><%= element.quantity %>||<>||<% }) %></td>
-								<td><% (order[i].products).forEach(element => { %><%= element.total %>||<>||<% }) %></td>
-								<td><%= order[i].address.addressLine1 %></td>
-								<td><%= order[i].address.postcode %></td>
+								<td><% (order[i].products).forEach(element => { %><%= element.name  %> <br><% }) %></td>
+								<td <% if (order[i].status=="Cancelled") { %>
+									style="color:red"
+								   <% } %>
+								   <% if (order[i].status=="Processing") { %>
+									style="color:orange"
+								   <% } %>
+								   <% if (order[i].status=="Delivered") { %>
+									   style="color:green"
+								   <% } %>
+								   <% if (order[i].status=="Shipped") { %>
+									   style="color:blue"
+								   <% } %>
+								   <% if (order[i].status=="Returned") { %>
+									style="color:violet"
+								   <% } %>><%= order[i].status %></td>
 								<td><a href="/order-details/<%= order[i]._id %>">Detailed View</a></td>
-								
+								<td>
+									<% if (order[i].status === "Cancelled") { %>
+									  Cancelled
+									  <% } %>
+									<% if (order[i].status === "Processing") { %>
+										<a href="/cancel-order/<%= order[i]._id %>" style="color: red;" class="btn border-shadow update">
+										  <span class="text-gradient"><i class="fa fa-ban" aria-hidden="true"></i></span>
+										</a>
+										<% } %>
+									<% if (order[i].status === "Shipped") { %>
+											<a href="/cancel-order/<%= order[i]._id %>" style="color: red;" class="btn border-shadow update">
+											  <span class="text-gradient"><i class="fa fa-ban" aria-hidden="true"></i></span>
+											</a>
+											<% } %>	
+									<% if (order[i].status === "Delivered") { %>
+									  <a href="/return-order/<%= order[i]._id %>" style="color: red;" class="btn border-shadow update">
+										<span class="text-gradient">Return Product <i class="fa fa-ban" aria-hidden="true"></i></span>
+									  </a>
+									<% } %>
+								  </td>
 							</tr>
 						</a>
 
@@ -109,6 +148,34 @@
 		</div>
 	</div>
 	<!--================End Login Box Area =================-->
+
+	<!-- modal -->
+	<div class="modal fade" id="addProfilePic" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLongTitle">Add Profile Pic</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+			 <form class="text-dark" action="/add-profile-pic" method="post" enctype="multipart/form-data">
+				<div class="col-md-12 form-group">
+					<input type="file" class="form-control" id="image" name="image" value="" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
+				</div>
+				   <div class="modal-footer">
+					 <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+					 <a><button type="submit" class="btn btn-primary">confirm</button></a>
+				   </div>
+				 </form>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	<!-- modal -->
+
+
 
 	<!-- start footer Area -->
 	<footer class="footer-area section_gap">

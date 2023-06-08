@@ -19,11 +19,11 @@
                 <div class="top-filter-head">Product Filters</div>
                 <div class="common-filter">
                     <div class="head">Brands</div>
-                    <form method="post" action="/brand-filter" >
+                    <form method="GET" action="/all-product" >
                         <ul>
-                            <li class="filter-list"><input value="/nike" class="pixel-radio" type="radio" id="apple" name="brand"><label for="apple">Nike<span>(29)</span></label></li>
-                            <li class="filter-list"><input value="/adidas" class="pixel-radio" type="radio" id="asus" name="brand"><label for="asus">Adidas<span>(29)</span></label></li>
-                            <li class="filter-list"><input value="/new-balance" class="pixel-radio" type="radio" id="gionee" name="brand"><label for="gionee">New Balance<span>(19)</span></label></li>
+                            <li class="filter-list"><input value="Nike" class="pixel-radio" type="radio" id="nike" name="brand"><label for="nike">Nike</label></li>
+                            <li class="filter-list"><input value="Adidas" class="pixel-radio" type="radio" id="adidas" name="brand"><label for="adidas">Adidas</label></li>
+                            <li class="filter-list"><input value="NewBalance" class="pixel-radio" type="radio" id="New-Balance" name="brand"><label for="New-Balance">New Balance</label></li>
                             <button class="btn gray_btn"  type="submit" >apply</button>
                         </ul>
                     </form>

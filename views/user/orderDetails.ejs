@@ -13,8 +13,8 @@
                 <div class="col-first">
                     <h1>Order Details</h1>
                     <nav class="d-flex align-items-center">
-                        <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-                        <a href="category.html">Order Details</a>
+                        <a href="/user-profile">User Profile<span class="lnr lnr-arrow-right"></span></a>
+                        <a href="#">Order Details</a>
                     </nav>
                 </div>
             </div>
@@ -35,12 +35,10 @@
                                 <th scope="col">Price</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Total</th>
+                                <th scope="col">Payment Mode</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-
-                                
-
+                                <th scope="col">Get Invoice</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,34 +48,20 @@
                                 <% let sum=0 %>
 
                                         <tr>
-                                            <% order.products.forEach(element => { %>
                                              <td><%=order.userId.name  %></td>
-                                             <td><%=element.name %></td>
-                                             <td><%= element.price %></td>
-                                             <td><%= element.quantity %></td>
-                                             <td><%= element.total %></td>
+                                             <td>  <% order.products.forEach(element => { %> <%=element.name %> <br> <% }) %></td>
+                                             <td>  <% order.products.forEach(element => { %> <%= element.price %> <br> <% }) %></td>
+                                             <td>  <% order.products.forEach(element => { %> <%= element.quantity %> <br>  <% }) %></td>
+                                             <td>  <% order.products.forEach(element => { %> <%= element.total %> <br> <% }) %></td>
+                                             <td>  <%=order.paymentMode %> <% if (order.secondaryPaymentMode) { %>
+                                              /<%= order.secondaryPaymentMode %>
+                                             <% } %></td>
                                              <td><%= order.address.addressLine1 %><br> <%= order.address.addressLine2 %> <br> <%= order.address.postcode %> </td>
                                              <td><a href="#"><%= order.status %></a></td>
-                                             <td><a   href="/cancel-order/<%= order._id%>" style="color: red;" class="btn border-shadow update">
-                                                <span class="text-gradient"><i class="fa fa-ban" aria-hidden="true"></i></span>
-                                                </a></td>
-             
+                                             <td><a href="/invoice/<%=order._id%>">get invoice</a></td>
                                         </tr>
-                                        <% }) %>
-        
-                                          
-        
-                                  
-                             
+                                       
                                    <% } %>
-                            
-                           
-                          
-
-                          
-
-                           
-                            
                         </tbody>
                     </table>
                 </div>
