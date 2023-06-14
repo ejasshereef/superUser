@@ -19,18 +19,30 @@
 							<div class="col-lg-12">
 								<img class="img-fluid" src="<%= products.image[0] %>" alt="">
 								<p>Main Image &nbsp;
-								<a href="/delete-image/<%= products.image[0] %>/<%= products._id %>" style="text-decoration: none; color: red;" >Delete Image <i  class="fa fa-trash" aria-hidden="true" style="color: red;"></i></a></p>
+									<% if ( products.image[0]) { %>
+										<a href="/delete-image/<%= products.image[0] %>/<%= products._id %>" style="text-decoration: none; color: red;" >Delete Image <i  class="fa fa-trash" aria-hidden="true" style="color: red;"></i></a></p>
+									<% } %>
 						   </div>
 						   <div class="col-lg-4">
 							<img class="img-fluid" src="<%= products.image[1] %>" alt="">
+							<% if ( products.image[1]) { %>
+								<a href="/delete-image/<%= products.image[1] %>/<%= products._id %>" style="text-decoration: none; color: red;" > <i  class="fa fa-trash" aria-hidden="true" style="color: red;"></i></a></p>
+							<% } %>
 					       </div>
 						  
 							
 							<div class="col-lg-4">
 								<img class="img-fluid" src="<%= products.image[2] %>" alt="">
+								<% if ( products.image[2]) { %>
+									<a href="/delete-image/<%= products.image[2] %>/<%= products._id %>" style="text-decoration: none; color: red;" >  <i  class="fa fa-trash" aria-hidden="true" style="color: red;"></i></a></p>
+								<% } %>
 						  </div>
 						  <div class="col-lg-4">
 							<img class="img-fluid" src="<%= products.image[3] %>" alt="">
+							<% if ( products.image[3]) { %>
+								<a href="/delete-image/<%= products.image[3] %>/<%= products._id %>" style="text-decoration: none; color: red;" >  <i  class="fa fa-trash" aria-hidden="true" style="color: red;"></i></a></p>
+							<% } %>
+
 					  </div>
 							
 						</div>
@@ -64,11 +76,25 @@
 									<%});%>
 						          </select>
 							</div>
+							<div class="col-md-12 row form-group">
+								<label class="col-md-5 mt-3 ml-2" for="addCategory">Choose the Category:</label>
+                                    <select class="col-md-6" name="addCategory" id="addCategory">
+										<% category.forEach(function(category) { %>
+                                      <option value="<%= category._id %>" <% if (category.name === products.category.name ) {%>
+										selected
+										<% } %>>
+										<%= category.name %></option>
+                                      <% }); %>
+                                    </select>
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="tel" class="form-control" id="addStock" name="addStock" value="<%= products.stock %>" placeholder="Stock" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Stock'">
+							</div>
                             <div class="col-md-12 form-group">
 								<input type="text" class="form-control" id="addDescription" name="addDescription" value="<%=products.description  %>" placeholder="Product Description" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Product Description'">
 							</div>
 							<div class="col-md-12 form-group">
-								<input type="file" multiple class="form-control" id="image" name="image" value="<% (brand).forEach(element => { %><%= element  %><% }) %>" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
+								<input onchange="return fileValidation()" type="file" multiple class="form-control" id="image" name="image" value="<% (brand).forEach(element => { %><%= element  %><% }) %>" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
 							</div>
 							
                             <div class="col-md-12 form-group">
@@ -87,6 +113,26 @@
 	</section>
 	<!--================End Login Box Area =================-->
 
+
+	<script>
+		function fileValidation() {
+		   let fileInput =
+			   document.getElementById('image');
+			
+		   let filePath = fileInput.value;
+		
+		   // Allowing file type
+		   let allowedExtensions =
+				   /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+			
+		   if (!allowedExtensions.exec(filePath)) {
+			   alert('Kindly select and valid Image');
+			   fileInput.value = '';
+			   return false;
+		   }
+		  
+	   }
+	 </script>
 	
 <%- include('_footer') %>
 

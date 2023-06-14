@@ -10,13 +10,13 @@
 	<!-- Start Banner Area -->
 	<section class="banner-area organic-breadcrumb">
 		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap   ">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 				<div class="col-first mt-5" >
-					<h1 style="color:orange;">Product Details Page</h1>
+					<h1 >Product Details Page</h1>
 					<nav class="d-flex align-items-center" >
-						<a style="color:orange;" href="/">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a style="color:orange;" href="all-product">All Product<span class="lnr lnr-arrow-right"></span></a>
-						<a style="color:orange;" href="/product-detail">product-details</a>
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/all-product">All Product<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/product-detail">product-details</a>
 					</nav>
 				</div>
 			</div>
@@ -56,34 +56,47 @@
 							
 							<li><a href="#"><span>Availibility</span> : In Stock</a></li>
 						</ul>
-						<p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
-							something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
-							during the winter.</p>
+						<p><%= products.description %></p>
 							
 						    <form action="/product-detail" method="post" >
-								<div class="product_count">
-									<label for="qty">Quantity:</label>
-								<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
-								<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-								 class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-								<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) , sst > 0 ) result.value--;return false;"
-								 class="reduced items-count " type="button"><i class="lnr lnr-chevron-down"></i></button>
-	
-	
-								 
-								 <div >
-								 <button type="submit" class="primary-btn mt-4 " style="width: 150px;" >Add to Cart</button>
+								<div class="container">
+									<div class="row">
+										<label >Size:</label>
+										<div class="col-md-6">
+											<select   name="size">
+												<option value="7">7</option>
+												<option value="8">8</option>
+												<option value="9">9</option>
+												<option value="10">10</option>
+												<option value="11">11</option>
+												<option value="12">12</option>
+											</select>
+										</div>
+										
+										<div class="product_count ">
+										<label for="qty">Quantity:</label>
+										<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
+										<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+										 class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+										<button  onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) , sst > 0 ) result.value--;return false;"
+										 class="reduced items-count  " type="button"><i class="lnr lnr-chevron-down"></i></button>
+										
+										 
+										</div>
+										<div class="col-md-4"></div>
+										<button type="submit" class="primary-btn mt-4  "  >Add to Cart</button>
+									</div>
 								</div>
-								 
-								
-								
-							   </div>
+							   
 							</form>
 						   <!-- <div class="card_area d-flex align-items-center mt-5">
 							<a class="primary-btn" href="#">Add to Cart</a>
-							<a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-							<a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
-						</div> -->
+							<a class="icon_btn" href="#">1</i></a>
+							<div type="checkbox" class="icon_btn" href="#">2</i></div> -->
+
+							
+
+						</div>
 						   
 						
 					</div>

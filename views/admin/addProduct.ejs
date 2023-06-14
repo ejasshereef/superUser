@@ -39,18 +39,32 @@
                                       <% }); %>
                                     </select>
 							</div>
+
+							<div class="col-md-12 row form-group">
+								<label class="col-md-5 mt-3 ml-2" for="addCategory">Choose the Category:</label>
+                                    <select class="col-md-6" name="addCategory" id="addCategory">
+										<% category.forEach(function(category) { %>
+                                      <option value="<%= category._id %>"><%= category.name %>
+									</option>
+                                      <% }); %>
+                                    </select>
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="tel" class="form-control" id="addStock" name="addStock" placeholder="Stock" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Stock'">
+							</div>
 							
                             <div class="col-md-12 form-group">
 								<input type="text" class="form-control" id="addDescription" name="addDescription" placeholder="Product Description" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Product Description'">
 							</div>
 							
 							<div class="col-md-12 form-group">
-								<input type="file" multiple class="form-control" id="image" name="image" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
+								<input   type="file" multiple class="form-control" id="image" name="image" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
 							</div>
 
                             <div class="col-md-12 form-group">
-								<input type="number" class="form-control" id="addPrice" name="addPrice" placeholder="Price" onfocus="this.placeholder = ''" onblur="this.placeholder = 'price'">
+								<input type="tel" class="form-control" id="addPrice" name="addPrice" placeholder="Price" onfocus="this.placeholder = ''" onblur="this.placeholder = 'price'">
 							</div>
+							
 
 							
 							<div class="col-md-12 form-group mb-5">
@@ -66,37 +80,23 @@
 	<!--================End Login Box Area =================-->
 	
 	<script>
-		function uploadImage() {
-		  const fileInput = document.getElementById('imageInput');
-		  const file = fileInput.files[0];
-  
-		  if (!file) {
-			alert('Please select an image file.');
-			return;
-		  }
-  
-		  // Perform additional client-side validation if needed
-		  // ...
-  
-		  // Create a FormData object and append the file to it
-		  const formData = new FormData();
-		  formData.append('image', file);
-  
-		  // Send the formData to the backend
-		  fetch('/upload', {
-			method: 'POST',
-			body: formData,
-		  })	
-			.then((response) => response.json())
-			.then((data) => {
-			  // Handle the response from the backend
-			  console.log(data);
-			})
-			.catch((error) => {
-			  // Handle any errors
-			  console.error(error);
-			});
-		}
+		 function fileValidation() {
+            let fileInput =
+                document.getElementById('image');
+             
+            let filePath = fileInput.value;
+         
+            // Allowing file type
+            let allowedExtensions =
+                    /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+             
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Kindly select and valid Image');
+                fileInput.value = '';
+                return false;
+            }
+           
+        }
 	  </script>
 	
 

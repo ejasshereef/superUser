@@ -1,5 +1,7 @@
-const axios=require('axios')
+const axios=require('axios');
+const { Message } = require('twilio/lib/twiml/MessagingResponse');
 const Branddb=require("../model/BrandModel");
+const Categorydb = require('../model/category');
 const Productdb=require('../model/productModel')
 
 exports.signup_page=(req, res) => {
@@ -57,15 +59,16 @@ exports.add_user=(req,res)=>{
     
 }
 
-exports.add_product=(req,res)=>{
-  if(req.session){
-   //res.setHeader("Cache-Control", "no-cache,no-store");
-    // console.log(req.session.admin);
-       Branddb.find({}).exec()
-      .then(brand=>{res.render('addProduct',{activeLink:'add-product',brand})})
+exports.add_product=async(req,res)=>{
+  
+   try {
+   const brand=await Branddb.find()
+   const category=await Categorydb.find()
+   res.render('addProduct',{activeLink:'add-product',category, brand})
     
-  }
-    
+   } catch (err) {
+    res.status(500).send(err)
+   }
  }
 
 
@@ -83,22 +86,17 @@ exports.update_user=(req,res)=>{
 }
 
 exports.update_prouduct=async(req,res)=>{
-  // const brand=await Branddb.find()
-  // axios.get('http://localhost:3000/products',{params:{id:req.query.id}})
-  //   .then(function(productdata){
-  //     console.log("this is from update product",productdata.data.brand);
-  //     console.log(brand[2]._id);
-  //      res.setHeader("Cache-Control", "no-cache,no-store");
-  //      res.render('updateProduct',{products:productdata.data,brand}) 
-          
-  //   })
-  //  .catch(err=>{
-  //      res.send(err)
-  //  })
+ 
+ try {
   const id=req.query.id
   const brand=await Branddb.find()
-  const products=await Productdb.findById(id).populate("brand")
-  res.render('updateProduct',{activeLink:'update-product',products,brand})
+  const category=await Categorydb.find()
+  const products=await Productdb.findById(id).populate("brand").populate("category")
+  res.render('updateProduct',{activeLink:'update-product',products,category,brand})
+  
+ } catch (err) {
+  res.status(500).send(err)
+ }
   
 }
 exports.test=async(req,res)=>{
@@ -149,7 +147,7 @@ exports.allProduct=async(req,res)=>{
         .populate('brand')
         .populate('category')
         .sort(sortOptions)
-        .sort({brand:-1})
+        .sort({brand:1})
         .skip(skip)
         .limit(limit)
         .then(content=>{

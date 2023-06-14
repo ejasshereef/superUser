@@ -1,26 +1,20 @@
 const express = require("express");
 
 const services = require("../services/render");
-const controller = require("../controller/controller");
+const controller=require("../controller/userController")
 const { requireAuth,checkUser,checkExistingUser,wallet} = require("../../middleware/userMiddleware");
-
-const Productdb=require('../model/productModel')
 
 const route = express.Router();
 
 //------home route-----//
-route.get("/", checkExistingUser,(req, res) => {
-    res.render("landingPage");
-  });
+route.get("/", checkExistingUser,controller.landing_page);
 
 //----otp route------//
 route.get('/forgotPassword',(req,res)=>{
-    res.render('forgetPassword')
+    res.render('forgotPassword')
   })
-  route.get('/zoom',(req,res)=>{
-    res.render("zoom")
-  })
-
+  
+  route.get('/contact',checkUser, controller.contact)
   route.post('/send-otp',controller.sendOTP)
   route.post('/verify-otp',controller.verifyOTP)
   route.get("/user-profile",checkUser,requireAuth,wallet,controller.user_profile)
@@ -53,11 +47,9 @@ route.get('/forgotPassword',(req,res)=>{
   route.get('/paypal-success',checkUser,requireAuth,controller.paypal_success)
   route.get('/paypal-err',checkUser,requireAuth,controller.paypal_err)
   route.get('/return-order/:id',checkUser,requireAuth,controller.return_order)
-  route.post('/refund/:id',checkUser,requireAuth,controller.refund)
   route.get('/add-to-cart/:id',checkUser,requireAuth,controller.product_to_cart)
   route.post('/add-profile-pic',checkUser,requireAuth,controller.uploadSingle, controller.add_profile_pic)
   route.post('/coupon',checkUser,requireAuth,controller.couponAjax)
-  route.get('/get-invoice/:id',checkUser,requireAuth,controller.get_invoice)
   route.get('/invoice/:id',checkUser,requireAuth,controller.invoice)
   route.get('/wallet-history',checkUser,requireAuth,wallet,controller.wallet_history)
   

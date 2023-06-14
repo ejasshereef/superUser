@@ -184,11 +184,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-Swal.fire(
-  'The Internet?',
-  'That thing is still around?',
-  'question'
-)
+
 
 
 exports.login = (req, res) => {
@@ -258,6 +254,22 @@ exports.dashboard = async(req, res) => {
    res.render("dashboard",{jan,feb,mar,april,may,admin});
 };
 
+
+exports.landing_page=async(req, res) => {
+  const page=req.query.page||0;
+  const limit=parseInt(req.query.limit)||8||3;
+
+  const banner=await Bannerdb.findOne({status:"Active"})
+
+  content=Productdb
+  .find()
+  .populate('brand')
+  .sort({brand:1})
+  .skip(page*limit)
+  .limit(limit)
+  .then(content=>{res.render("landingPage",{content,banner});})
+}
+
 exports.loadingPage = async (req, res) => {
 
   const page=req.query.page||0;
@@ -298,8 +310,7 @@ exports.add_brand = async (req, res) => {
       console.error(err);
       res.status(500).send(err.message);
     }
-  
-  
+
 };
 
 exports.userLogout = (req, res) => {
@@ -882,7 +893,7 @@ exports.checkoutPayment= async (req,res)=>{
        
         sum=sum-(coupon.discount*sum)/100
       }
-      console.log(sum);
+     
      let amount =sum
      let secondaryAmount=0
      if(secondaryPayment){
@@ -963,6 +974,24 @@ exports.checkoutPayment= async (req,res)=>{
       cart.products.forEach(element=>{
         sum+=(element.quantity*element.price)
       })
+
+
+      let found=false
+      for (let i = 0; i < (user.couponUsed).length; i++) {
+        if(user.couponUsed[i]===couponApplied){
+         
+          found=true
+          break;
+        }
+        
+      }
+
+      if(coupon && sum>5000 && !found ){
+       
+        sum=sum-(coupon.discount*sum)/100
+      }
+
+
        let amount=sum
        let secondaryAmount=0
       if(secondaryPayment){
@@ -977,6 +1006,7 @@ exports.checkoutPayment= async (req,res)=>{
         secondaryPaid:secondaryAmount,
         address:addressId,
         status:"Processing",
+        coupon:couponApplied,
         subTotal:sum
       })
 
@@ -995,7 +1025,7 @@ exports.checkoutPayment= async (req,res)=>{
         
          paypalTotal=parseInt(paypalSum/82)
         
-        console.log(paypalTotal);
+       
 
          createPayment={
           'intent':'sale',
@@ -1028,6 +1058,12 @@ exports.checkoutPayment= async (req,res)=>{
       wallet.amount=0
       await wallet.save()
      }
+
+     if(order.coupon){
+      user.couponUsed.push(couponApplied)
+      await user.save()
+     }
+
      const result = await Cartdb.findOneAndDelete({userId:userId})
     }
     if(secondaryPayment==="wallet" && wallet.amount > subTotal){
@@ -1035,11 +1071,38 @@ exports.checkoutPayment= async (req,res)=>{
       cart.products.forEach(element=>{
         sum+=(element.quantity*element.price)
       })
+
+      let found=false
+      for (let i = 0; i < (user.couponUsed).length; i++) {
+        if(user.couponUsed[i]===couponApplied){
+         
+          found=true
+          break;
+        }
+        
+      }
+
+       if(coupon && sum>5000 && !found ){
+       
+        sum=sum-(coupon.discount*sum)/100
+      }
+
+
+       let amount =sum
+     let secondaryAmount=0
+     if(secondaryPayment){
+      amount=sum-wallet.amount
+      secondaryAmount=wallet.amount
+     }
+
+
       const order=new Orderdb({
         userId:userId,
         secondaryPaymentMode:"wallet",
+        secondaryPaid:secondaryAmount,
         address:addressId,
         status:"Processing",
+        coupon:couponApplied,
         subTotal:sum
       })
 
@@ -1057,6 +1120,11 @@ exports.checkoutPayment= async (req,res)=>{
      
       wallet.amount=wallet.amount-sum
       await wallet.save();
+
+       if(order.coupon){
+      user.couponUsed.push(couponApplied)
+      await user.save()
+     }
       
       const result = await Cartdb.findOneAndDelete({userId:userId})
       res.render('confirmedOrder',{order,address})
@@ -1074,9 +1142,6 @@ exports.paypal_success= async(req,res)=>{
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
  
-  
-  
-
   const execute_payment_json = {
     "payer_id": payerId,
     "transactions": [{
@@ -1091,7 +1156,6 @@ exports.paypal_success= async(req,res)=>{
     //When error occurs when due to non-existent transaction, throw an error else log the transaction details in the console then send a Success string reposponse to the user.
 
     
-
   if  (error)  {
       console.log(error.response);
       throw error;
@@ -1229,9 +1293,8 @@ exports.delete_category=async(req,res)=>{
  exports.refund=async(req,res)=>{
   try {
     const id=req.params.id
-    const userId=res.locals.user._id
-    
     let order=await Orderdb.findByIdAndUpdate(id,{status:"Refunded"},{useFindAndModify:false},{new:true}).populate("userId").populate("address").populate("products").populate("products.brand")
+    const userId=order.userId
     const wallet =await Walletdb.findOne({userId:userId})
     let sum=wallet.amount
     order.products.forEach(element => {
@@ -1317,9 +1380,7 @@ exports.edit_coupon=async(req,res)=>{
 }
 
 
-exports.use_wallet=async(req,res)=>{
-  
-}
+
 
 exports.add_profile_pic=async(req,res)=>{
   const userId=res.locals.user._id

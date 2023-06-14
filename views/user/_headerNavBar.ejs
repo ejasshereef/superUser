@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand-lg navbar-light main_box">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="/"><img src="/assets/img/logo.png" alt=""></a>
+                <a class="navbar-brand logo_h" href="/loadingPage"><img src="/assets/img/logo.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                  aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
@@ -46,11 +46,19 @@
 
                         <li class="nav-item submenu dropdown ">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                             aria-expanded="false"><%= user.name %></a>
+                             aria-expanded="false"><% if (user) { %>
+                                <%= user.name %>
+                                <% } else { %>
+                                <a class="nav-link dropdown-toggle" href="/login"> Hello Guest</a>
+                             <% } %></a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item "><a class="nav-link" href="/wallet-history">Wallet Balance  <%= wallet.amount %> </a></li>
-                                <li class="nav-item "><a class="nav-link" href="/user-profile">Profile</a></li>
-                                <li class="nav-item "><a class="nav-link" href="/user-logout">Logout</a></li>
+                                <% if (user) { %>
+                                    <li class="nav-item "><a class="nav-link" href="/wallet-history">Wallet Balance  <%= wallet.amount %> </a></li>
+                                    <li class="nav-item "><a class="nav-link" href="/user-profile">Profile</a></li>
+                                    <li class="nav-item "><a class="nav-link" href="/user-logout">Logout</a></li>
+                                    <% } else { %>
+                                     
+                                <% } %>
                                
                             </ul>
                         </li>

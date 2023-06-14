@@ -3,73 +3,7 @@
 <body>
 	
 
-	<header class="header_area sticky-header">
-		<div class="main_menu">
-			<nav class="navbar navbar-expand-lg navbar-light main_box">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" href="/"><img src="/assets/img/logo.png" alt=""></a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Sneakers</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="/login">All Product</a></li>
-									<li class="nav-item"><a class="nav-link" href="/login">Adidas</a></li>
-									<li class="nav-item"><a class="nav-link" href="/login">New Balance</a></li>
-									<li class="nav-item"><a class="nav-link" href="/login">Nike</a></li>
-								   
-								</ul>
-							</li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Apparel</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="/login">Hoodies</a></li>
-									<li class="nav-item"><a class="nav-link" href="/login">Accessories</a></li>
-								</ul>
-							</li>
-							<li class="nav-item submenu dropdown active">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Pages</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item active"><a class="nav-link" href="/login">Login</a></li>
-									<li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
-									
-								</ul>
-							</li>
-							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="/login" class="loginPage"><span class="ti-user"></span></a></li>
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
-							<li class="nav-item">
-								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-		</div>
-		<div class="search_input" id="search_input_box">
-			<div class="container">
-				<form class="d-flex justify-content-between">
-					<input type="text" class="form-control" id="search_input" placeholder="Search Here">
-					<button type="submit" class="btn"></button>
-					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
-				</form>
-			</div>
-		</div>
-	</header>
+	<%- include('_headerNavBar') %>
 	
 
 	<!-- Start Banner Area -->
@@ -77,10 +11,10 @@
 		<div class="container">
 			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 				<div class="col-first">
-					<h1>Login/Register</h1>
+					<h1>OTP Login</h1>
 					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Login/Register</a>
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/login-otp">OTP Login</a>
 					</nav>
 				</div>
 			</div>
@@ -96,7 +30,7 @@
 				<div class="col-md-6">
 					<div class="login_form_inner">
 						<h3>Log in to enter</h3>
-						<form class="row login_form" action="/login-otp" method="post" id="contactForm" novalidate="novalidate">
+						<form onsubmit="return validate()" class="row login_form" action="/login-otp" method="post" id="contactForm" novalidate="novalidate">
 							<div class="col-md-12 form-group">
 								<input type="tel" class="form-control" id="otpPhone" name="phone" placeholder="Phone Number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone Number'">
 							</div>
@@ -218,5 +152,24 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="/assets/js/gmaps.min.js"></script>
 	<script src="/assets/js/main.js"></script>
 
+
+	<script>
+		
+    function validate(){
+        let phone=document.getElementById('otpPhone')
+       
+
+        const regexPhone = /[0-9]{10}/gm;
+        
+        if((phone.value !=''&& regexPhone.test(phone.value))){
+            return true
+        }else{
+            alert("enter a valid Phone Number")
+            return false
+
+        }
+
+   }
+	</script>
 
 	<%- include('_userfooter') %>

@@ -36,6 +36,8 @@
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Total</th>
                                 <th scope="col">Payment Mode</th>
+                                <th scope="col">SubTotal</th>
+                                <th scope="col">Coupon Used</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Get Invoice</th>
@@ -56,6 +58,8 @@
                                              <td>  <%=order.paymentMode %> <% if (order.secondaryPaymentMode) { %>
                                               /<%= order.secondaryPaymentMode %>
                                              <% } %></td>
+                                             <td><%= order.subTotal %></td>
+                                             <td><%= order.coupon %></td>
                                              <td><%= order.address.addressLine1 %><br> <%= order.address.addressLine2 %> <br> <%= order.address.postcode %> </td>
                                              <td><a href="#"><%= order.status %></a></td>
                                              <td><a href="/invoice/<%=order._id%>">get invoice</a></td>

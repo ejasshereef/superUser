@@ -14,7 +14,7 @@
                 <div class="col-first">
                     <h1>Checkout</h1>
                     <nav class="d-flex align-items-center">
-                        <a href="/loadingPage">Home<span class="lnr lnr-arrow-right"></span></a>
+                        <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
                         <a href="/checkout">Checkout</a>
                     </nav>
                 </div>
@@ -65,7 +65,7 @@
                                         <% sum = sum+(element.price*element.quantity); %>
                                         <% }) %>
                                         <a  onclick="addCoupon(document.getElementById('coupon'),'<%=sum %>','<%= wallet.amount %>','<%=user.couponUsed%>')"  class="primary-btn">Apply</a>
-                                        <a  onclick="walletPayment('<%=sum %>','<%= wallet.amount %>')"  class="primary-btn">Remove</a>
+                                        <a  onclick="removeCoupon('<%=sum %>')"  class="primary-btn">Remove</a>
                                         <% } %>
 							</div>
 
@@ -94,6 +94,7 @@
                             <ul class="list list_2">
                                 <li><a href="#">Subtotal <span><%= sum %></span></a></li>
                                 <li><a href="#">Shipping <span>00.00</span></a></li>
+                                <li><a href="#">Discount Coupon <span id="showCoupon"></span></a></li>
                               
                                      
                                         <% if (wallet) { %>
@@ -103,10 +104,10 @@
                                                 <div class="radion_btn">
                                                         <div  class="container">
                                                             <div class="row">
-                                                                <input onclick="walletPayment('<%=sum %>','<%= wallet.amount %>')"  type="checkbox" id="f-option9" name="secondaryPayment" value="wallet">
+                                                                <input onclick="walletPayment('<%=sum %>','<%= wallet.amount %>')"  type="checkbox" id="wallet" name="secondaryPayment" value="wallet">
                                                                  <input hidden name="sum" value="<%= sum %>" >
-                                                                <label class="col-md-10" for="f-option9"> Wallet  </label>
-                                                                <h6 id="walletAmout" ><%= wallet.amount %></h6>
+                                                                <label class="col-md-10" for="wallet"> Wallet  </label>
+                                                                <h6 id="walletAmount" ><%= wallet.amount %></h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -121,7 +122,7 @@
                                                 </div>
                                                 <div class="payment_item col-md-12 ">
                                                     <div class="radion_btn">
-                                                        <input type="checkbox"  onclick="walletPayment('<%=sum %>','<%= wallet.amount %>')" id="f-option6" name="primaryPayment" value="paypal">
+                                                        <input type="checkbox"  onclick="subtotal('<%=sum %>')" id="f-option6" name="primaryPayment" value="paypal">
                                                         <label for="f-option6">Paypal </label>
                                                         <img src="/assets/img/product/card.jpg" alt="">
                                                        
@@ -240,18 +241,17 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
     <script>
+
         function subtotal(sum){
             document.getElementById('subtotal').innerHTML=sum
         }
 
        function walletPayment(sum,wallet){
-           
-           console.log(wallet,sum);
            if(parseInt(wallet) >= parseInt(sum) ){
             let walletAmout=wallet-sum
             let output= 0
            document.getElementById('subtotal').innerHTML=output
-           document.getElementById('walletAmout').innerHTML=walletAmout
+           document.getElementById('walletAmount').innerHTML=walletAmout
         }else{
            let output= sum-wallet
            document.getElementById('subtotal').innerHTML=output
@@ -267,20 +267,35 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
           if (data.success) {
             console.log(data);
             if(coupon.value != "first10" && coupon.value != "next20"){
-                console.log("his is",coupon.value);
+               
                 alert("use valid coupon")
              }
             if(coupon.value === "first10"){
                 alert("using first 10% coupon")
-              let output=sum-(10*sum)/100
-              document.getElementById('subtotal').innerHTML=output
+                let discount=(sum*10)/100
+                let walletAmount=wallet-sum
+                let output=sum-(sum*10)/100
+                document.getElementById('showCoupon').innerHTML=discount
+              if(document.getElementById('wallet').checked){
+       
+                document.getElementById('walletAmount').innerHTML=discount+walletAmount
+             }else{
+                document.getElementById('subtotal').innerHTML=output
+             }
+             
              }
              if(coupon.value === "next20"){
                alert("using next 20% coupon")
+               let discount=(sum*20)/100
+               let walletAmount=wallet-sum
               let output=sum-(20*sum)/100
-              document.getElementById('subtotal').innerHTML=output
-             }
-               
+              document.getElementById('showCoupon').innerHTML=discount
+              if(document.getElementById('wallet').checked){
+                document.getElementById('walletAmount').innerHTML=discount+walletAmount
+              }else{
+                document.getElementById('subtotal').innerHTML=output
+              }
+             }   
           }else{
             alert("coupon already used once")
           }
@@ -291,21 +306,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     }
 
 
-        function removeCoupon(){
-            if(coupon.value){
-           
-           if(coupon.value === "first10"){
-              
-              let output=sum-(10*sum)/100
-              document.getElementById('subtotal').innerHTML=output
-             }
-             if(coupon.value === "next20"){
-               
-              let output=sum-(20*sum)/100
-              document.getElementById('subtotal').innerHTML=output
-             }  
-       
-    }
+        function removeCoupon(sum){
+            document.getElementById('subtotal').innerHTML=sum
+            document.getElementById('coupon').value=''
+            document.getElementById('showCoupon').innerHTML=''
+
         }
 
           

@@ -9,6 +9,7 @@ let cartSchema=new mongoose.Schema({
       products: [{
         productId:{type:mongoose.Schema.Types.ObjectId,ref:"productdb"},
         quantity: {type:Number},
+        size:{type:Number},
         name: {type:String},
         price: {type:Number},
         brand:{type:mongoose.Schema.Types.ObjectId,ref:"branddb"},

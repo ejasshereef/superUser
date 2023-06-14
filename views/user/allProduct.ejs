@@ -13,9 +13,9 @@
 				<div class="col-first">
 					<h1>Shop Category page</h1>
 					<nav class="d-flex align-items-center">
-						<a href="/loadingPage">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
 						<a href="#">Category<span class="lnr lnr-arrow-right"></span></a>
-						<a href="/adidas">All Product</a>
+						<a href="/all-product">All Product</a>
 					</nav>
 				</div>
 			</div>
@@ -35,7 +35,7 @@
 								<img class="img-fluid" src=<%= content.image[0] %> alt="">
 								<div class="product-details">
 									<h5><%= content.brand.name %></h5>
-									<a href="/product-detail?id=<%= content._id%>"><h6><%= content.description %></h6></a>
+									<a href="/product-detail?id=<%= content._id%>"><h6><%= content.name %></h6></a>
 									<div class="price">
 										<h6><i class="fa fa-inr" aria-hidden="true"></i> <%= content.price %></h6>
 									</div>

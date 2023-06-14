@@ -32,7 +32,7 @@
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Today Sale</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 class="mb-0">₹ </h6>
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                             <i class="fa fa-chart-bar fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Total Sale</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 class="mb-0">₹ <%= salesValue %></h6>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                             <i class="fa fa-chart-area fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Today Revenue</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 class="mb-0">1234</h6>
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                             <i class="fa fa-chart-pie fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Total Revenue</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 class="mb-0">1234</h6>
                             </div>
                         </div>
                     </div>
@@ -98,13 +98,14 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
+                       
                         <h6 class="mb-0">Sales Details</h6>
                         <form action="/dashboard" method="get">
                             <label for="minPrice">Start: </label>
                             <input 
                               type="date"
                               name="startDate"
-                              style="width: 80px"
+                              style="width: 120px"
                               id="minPrice",
                               placeholder="Start"
                             />
@@ -113,25 +114,27 @@
                             <input
                               type="date"
                               name="endDate"
-                              style="width: 80px"
+                              style="width: 120px"
                               id="maxPrice",
                               placeholder="End"
                             />
                     
-                            <button type="submit" class="ml-2 btn-info" style="width: 80px">
+                            <button type="submit" class="ml-2  btn-primary" style="width: 80px">
                               Filter
                             </button>
                           </form>
+                    <h6 class="mb-0"></h6>
                         
-                        <a href="">Show All</a>
                     </div>
                     <div class="table-responsive">
                         <table id="adminTable" class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-dark">
                                     <th scope="col">SI No</th>
-                                    <th scope="col">Date</th>
+                                    <th scope="col" data-filter="date">Date</th>
+                                    
                                     <th scope="col">Invoice</th>
+                                    <th scope="col">User Name</th>
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Amount</th>
                                     <th scope="col">Status</th>
@@ -144,20 +147,16 @@
                                 <tr>
                                         <td><%= index+1 %></td>
                                         <td><%= element.createdAt.toLocaleDateString() %></td>
+                                        
                                         <td><%= element._id.toString().slice(-8) %></td>
+                                        <td><%= element.userId.name %></td>
                                         <td><% (element.products).forEach(element => { %><%= element.name %><br><% }) %></td>
                                         <td><%= element.subTotal%></td>
-                                        <td>Paid</td>
+                                        <td><%= element.status %></td>
                                        
                                     </tr>
                                     <% }) %>
                                    <% } %>
-
-                                  
-                               
-                               
-                               
-                                
                             </tbody>
                         </table>
                     </div>
@@ -406,7 +405,28 @@ document.addEventListener("DOMContentLoaded", function() {
             dom: 'Bfrtip',
             buttons: [
               'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
+            ], 
+            initComplete: function() {
+            this.api().columns().every(function() {
+        var column = this;
+        var columnHeader = $(column.header());
+        var filterType = columnHeader.data('filter');
+        
+        if (filterType === 'date') {
+          var minDateInput = $('<input type="date" placeholder="Start">')
+            .appendTo($(column.header()))
+            .on('change', function() {
+              column.search($(this).val(), true, false).draw();
+            });
+            
+          var maxDateInput = $('<input type="date" placeholder="End">')
+            .appendTo($(column.header()))
+            .on('change', function() {
+              column.search($(this).val(), true, false).draw();
+            });
+        }
+      });
+    }
           });
         });
       </script>
