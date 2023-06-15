@@ -655,8 +655,8 @@ exports.checkoutPayment = async (req, res) => {
         intent: "sale",
         payer: { payment_method: "paypal" },
         redirect_urls: {
-          return_url: "http://localhost:3000/paypal-success",
-          cancel_url: "http://localhost:3000/paypal-err",
+          return_url: "http://superu.shop/paypal-success",
+          cancel_url: "http://superu.shop/paypal-err",
         },
         transactions: [
           {
