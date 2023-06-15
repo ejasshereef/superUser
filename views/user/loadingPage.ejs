@@ -79,8 +79,8 @@
 				<div class="col-lg-6 no-padding exclusive-right">
 					<div class="active-exclusive-product-slider">
 						<!-- single exclusive carousel -->
-						<% if (content) { %>
-							<% content.forEach(element => { %>
+						<% if (adidas) { %>
+							<% adidas.forEach(element => { %>
 						<div class="single-exclusive-slider">
 							<img class="img-fluid" src="<%= element.image[0] %>" alt="">
 							<div class="product-details">
@@ -93,6 +93,7 @@
 									<a class="add-btn" href="/add-to-cart/<%= element._id %>"><span class="ti-bag"></span></a>
 									<span class="add-text text-uppercase">Add to Bag</span>
 								</div>
+								
 							</div>
 						</div>
 
@@ -113,7 +114,7 @@
 	
 
 	<!-- start product Area -->
-	<section class="  section_gap">
+	<section class=" owl-carousel active-product-area  section_gap">
 		<!-- single product slide -->
 		<div class="single-product-slider">
 			<div class="container">
@@ -129,8 +130,8 @@
 				</div>
 				<div class="row">
 					<!-- single product -->
-					<% if (content) { %>
-						<% content.forEach(element => { %>
+					<% if (adidas) { %>
+						<% adidas.forEach(element => { %>
 						 
 							<div class="col-lg-3 col-md-6">
 								<div class="single-product">
@@ -151,6 +152,8 @@
 												<span class="lnr lnr-heart"></span>
 												<p class="hover-text">Wishlist</p>
 											</a>
+											
+											
 										</div>
 									</div>
 								</div>
@@ -171,10 +174,104 @@
 				<div class="row justify-content-center">
 					<div class="col-lg-6 text-center">
 						<div class="section-title">
-							
+							<h1>Coming Products</h1>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+								dolore
+								magna aliqua.</p>
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<!-- single product -->
+					<% if (nike) { %>
+						<% nike.forEach(element => { %>
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<img class="img-fluid" src="<%= element.image[0] %>" alt="">
+							<div class="product-details">
+								<h6><%= element.brand.name %></h6>
+									<a href="/product-detail?id=<%= element._id%>"><h6><%= element.name %></h6></a>
+								<div class="price">
+									<h6><%= element.price %></h6>
+									
+								</div>
+								<div class="prd-bottom">
+
+									<a href="/add-to-cart/<%= element._id %>" class="social-info">
+										<span class="ti-bag"></span>
+										<p class="hover-text">add to bag</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<% }) %>
+					 
+					<% } %>
+				</div>
+
+				
+			</div>
+		</div>
+
+
+
+		<!-- single product slide -->
+		<div class="single-product-slider">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-6 text-center">
+						<div class="section-title">
+							<h1>Coming Products</h1>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+								dolore
+								magna aliqua.</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<!-- single product -->
+					<% if (newBalance) { %>
+						<% newBalance.forEach(element => { %>
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<img class="img-fluid" src="<%= element.image[0] %>" alt="">
+							<div class="product-details">
+								<h6><%= element.brand.name %></h6>
+									<a href="/product-detail?id=<%= element._id%>"><h6><%= element.name %></h6></a>
+								<div class="price">
+									<h6><%= element.price %></h6>
+									
+								</div>
+								<div class="prd-bottom">
+
+									<a href="/add-to-cart/<%= element._id %>" class="social-info">
+										<span class="ti-bag"></span>
+										<p class="hover-text">add to bag</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<% }) %>
+					 
+					<% } %>
+				</div>
+
 				
 			</div>
 		</div>
@@ -201,16 +298,16 @@
 					<div class="row">
 						
 	
-						<% if (content) { %>
-						 <% content.forEach(element => { %>
+						<% if (ladies) { %>
+						 <% ladies.forEach(element => { %>
 							<div class="col-lg-4 col-md-4 col-sm-6">
 								<div class="single-related-product d-flex">
 									<a href="#"><img src="<%= element.image[0] %>" style="height: 100px;" alt=""></a>
 									<div class="desc">
-										<a href="#" class="title">Black lace Heels</a>
+										<a href="#" class="title"><%= element.name %></a>
 										<div class="price">
-											<h6>$189.00</h6>
-											<h6 class="l-through">$210.00</h6>
+											<h6 class="l-through"><%= element.price %></h6>
+											<h6 ><%= element.price-=element.price*10/100 %></h6>
 										</div>
 									</div>
 								</div>

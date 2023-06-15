@@ -13,6 +13,8 @@ const paypal = require("paypal-rest-sdk");
 const Walletdb = require("../model/wallet");
 const Bannerdb = require("../model/banner");
 const { v4: uuidv4 } = require("uuid");
+const Categorydb = require("../model/category");
+const Branddb = require("../model/BrandModel");
 
 
 const { TWILIO_SERVICE_SID, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN } =
@@ -120,8 +122,7 @@ exports.login_otp_verify = async (req, res, next) => {
         to: "+91" + phone,
         code: otp,
       });
-    // res.status(200).send(`OTP verified successfully : ${JSON.stringify(verifiedResponse)}`)
-    //res.render('forgetPassword',{verificationMessage:JSON.stringify(verifiedResponse.status) })
+    
 
     if (verifiedResponse.status == "approved") {
       await Userdb.findOne({ phone: phone })
@@ -237,17 +238,22 @@ exports.loadingPage = async (req, res) => {
   const limit = parseInt(req.query.limit) || 8 || 3;
 
   const banner = await Bannerdb.findOne({ status: "Active" });
+  const category=await Categorydb.findOne({name:"Female"})
 
-  content = Productdb.find()
-    .populate("brand")
-    .sort({ brand: 1 })
-    .skip(page * limit)
-    .limit(limit)
-
-    .then((content) => {
-      res.render("loadingPage", { content, banner });
-    });
+  const ladies=await Productdb.find({category})
+  const findBrand=async(brand)=>{
+    let brandName=await Branddb.find({name:brand})
+    let content=await Productdb.find({brand:brandName}).limit(8)
+    return content
+  }
+  const adidas=await findBrand("Adidas")
+  const nike=await findBrand("Nike")
+  const newBalance=await findBrand("NewBalance")
+  
+  res.render("loadingPage", { ladies,nike,newBalance, adidas, banner });
+  
 };
+
 
 exports.userLogout = (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
@@ -280,7 +286,7 @@ exports.product_to_cart = async (req, res) => {
   try {
     const pId = req.params.id || id;
     const qty = req.body.qty || 1;
-    const size=parseInt(req.body.size)
+    const size=parseInt(req.body.size)||7
     console.log(size);
     const userId = res.locals.user._id;
     const product = await Productdb.findById(pId).populate("brand");
@@ -340,6 +346,7 @@ exports.cart = async (req, res) => {
     const cart = await Cartdb.findOne({ userId: userId._id })
       .populate("products.brand")
       .populate("products.productId");
+    
     res.render("cart", { cart });
   } catch (err) {
     res.status(500).send(err.message);
@@ -933,3 +940,25 @@ exports.wallet_history = async (req, res) => {
   }).populate("userId");
   res.render("walletHistory", { order, wallet });
 };
+
+
+exports.change_product_size=async (req,res)=>{
+ try {
+  const id=req.params.id;
+  const userId=res.locals.user._id;
+  const size=parseInt(req.body.size)
+  
+  let cart=await Cartdb.findOne({userId})
+  for (let i = 0; i < cart.products.length; i++)  {
+    if(cart.products[i]._id==id){
+     
+      cart.products[i].size=size;
+     
+      await cart.save()
+    }
+  };
+  res.redirect('/cart')
+ } catch (err) {
+  res.status(500).send(err.message)
+ }
+}

@@ -51,6 +51,6 @@ route.get('/forgotPassword',(req,res)=>{
   route.post('/coupon',checkUser,requireAuth,controller.couponAjax)
   route.get('/invoice/:id',checkUser,requireAuth,controller.invoice)
   route.get('/wallet-history',checkUser,requireAuth,wallet,controller.wallet_history)
-  
+  route.post('/change-product-size/:id',checkUser,requireAuth,controller.change_product_size)
 
   module.exports=route

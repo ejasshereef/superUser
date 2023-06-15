@@ -30,8 +30,10 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th scope="col"></th>
                                 <th scope="col">Product</th>
                                 <th scope="col">Brand</th>
+                                
                                 <th scope="col">Price</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Total</th>
@@ -50,21 +52,16 @@
                                
                                     <tr>
                                         <td><img src="<%= element.productId.image[0] %>" alt="" style="width: 100px;"></td>
-                                        <td><%=element.name %></td>
+                                        <td><%=element.name %> <br> <a data-toggle="modal" data-target="#editStatus<%=element._id     %>" >(Size: <b><%= element.size %></b> )</a> </td>
+                                       
+                                        
                                         <td><%=element.brand.name %></td>
+                                       
                                         <td><%=element.price  %></td>
                                         <td>
                                             <div class="container  ">
                                                 <div class="col ml-5 "  >
-                                                <!-- <form  class="product_count col-md-4 mb-4 " method="post" action="/cart/<%= element._id%>/inc">
-                                                    <button type="submit" value="+" ><i class="fa fa-plus-square" aria-hidden="true"></i></button>
-                                                </form>
-                                                <div class="product_count col-md-4 " ><%=element.quantity %></div>       
-                                                <form class="product_count col-md-4" method="post" action="/cart/<%= element._id%>/dec">
-                                                     <button type="submit" value="-" ><i class="fa fa-minus-square" aria-hidden="true"></i></button>
-                                                </form> -->
-                                                <!-- <div  id="qty" class="product_count col-md-4 " value="<%= element.quantity %>" product_id="<%= element._id %>" ><%=element.quantity %></div>  -->
-                                                <!-- <input type="number" id="qty-<%=element._id%>" class="quantity-input" value="<%= element.quantity  %>" min="1" max="99" product_id="<%= element._id %>"> -->
+                                               
                                                 <button onclick="dec('<%= element._id %>')" class=" col-md-2 mb-2 " style="border-width: 0px;">-</button>
                                                 <span id="qty-<%=element._id%>"><%= element.quantity  %></span>
                                                 <button onclick="inc('<%= element._id %>')" class=" col-md-2 mb-2 " style="border-width: 0px;" >+</button>
@@ -192,6 +189,48 @@
         </div>
     </section>
     <!--================End Cart Area =================-->
+
+
+
+   <% if (cart) { %>
+    <% cart.products.forEach(element => { %>
+     <!-- Modal -->
+     <div class="modal fade" id="editStatus<%=element._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Size</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+             <form class="text-dark" action="/change-product-size/<%= element._id %>" method="post">
+                   <div class="form-group">
+                     <label for="name" class="col-form-label text-dark col-md-6">Size </label>
+                     <select class="custom-select tm-select-accounts col-md-6" id="name" name="size">
+                      <option value="7"<%=element.size=== 7 ? 'selected' : '' %>>7</option>
+                      <option value="8" <%=element.size=== 8 ? 'selected' : '' %>>8</option>
+					  <option value="9" <%=element.size=== 9 ? 'selected' : '' %>>9</option>
+					  <option value="10" <%=element.size=== 10 ? 'selected' : '' %>>10</option>
+					  <option value="11" <%=element.size=== 11 ? 'selected' : '' %>>11</option>
+					  <option value="12" <%=element.size=== 12 ? 'selected' : '' %>>12</option>
+                     </select>
+                     
+                   </div>
+                   <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+                     <a><button type="submit" class="btn btn-primary">confirm</button></a>
+                   </div>
+                 </form>
+            </div>
+          </div>
+        </div>
+      </div>
+        <% }) %>
+   <% } %>
+
+
 
     <!-- start footer Area -->
     <footer class="footer-area section_gap">
