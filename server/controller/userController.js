@@ -183,29 +183,37 @@ exports.signup = async (req, res) => {
 };
 
 exports.login = (req, res) => {
-  let email = req.body.loginName;
-  let password = req.body.loginPassword;
+ try {
+  const email = req.body.loginName;
+  const password = req.body.loginPassword;
 
   existingUser = Userdb.findOne({ email: email }).then(async (existingUser) => {
+    
     if (!existingUser) {
-      res.redirect("/landingPage");
-    }
-    const isValid = await bcrypt.compare(password, existingUser.password);
+      res.redirect("/login");
+    }else{
 
-    if (existingUser.status === "Unblocked") {
-      if (isValid) {
-        const token = createToken(existingUser._id);
-        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-
-        res.redirect("/loadingPage");
+      if (existingUser.status === "Unblocked") {
+        const isValid = await bcrypt.compare(password, existingUser.password);
+        if (isValid) {
+          const token = createToken(existingUser._id);
+          res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+  
+          res.redirect("/loadingPage");
+        } else {
+          res.render("landingPage");
+        }
       } else {
-        res.render("landingPage");
+        Swal.fire("user is blocked by admin");
+        res.redirect("/");
       }
-    } else {
-      Swal.fire("user is blocked by admin");
-      res.redirect("/");
     }
+    
   });
+  
+ } catch (err) {
+  res.status(500).send(err.message)
+ }
 };
 
 exports.landing_page = async (req, res) => {

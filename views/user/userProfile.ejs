@@ -97,7 +97,7 @@
 							<tr>
 								<td><%= i+1 %></td>
 								
-								<td><%= order[i]._id.toString().slice(-8) %></td>
+								<td><%= order[i].invoiceNumber %></td>
 								<td><%=order[i].userId.name  %></td>
 								<td><% (order[i].products).forEach(element => { %><%= element.name  %> <br><% }) %></td>
 								<td <% if (order[i].status=="Cancelled") { %>

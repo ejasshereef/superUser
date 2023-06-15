@@ -13,8 +13,7 @@ route.get("/", checkExistingUser,controller.landing_page);
 route.get('/forgotPassword',(req,res)=>{
     res.render('forgotPassword')
   })
-  
-  route.get('/contact',checkUser, controller.contact)
+  route.get('/contact',checkUser,wallet, controller.contact)
   route.post('/send-otp',controller.sendOTP)
   route.post('/verify-otp',controller.verifyOTP)
   route.get("/user-profile",checkUser,requireAuth,wallet,controller.user_profile)
