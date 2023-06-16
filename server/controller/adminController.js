@@ -75,8 +75,9 @@ exports.dashboard = async (req, res) => {
     salesValue += element.subTotal;
   });
 
-  let salesData = Orderdb.find();
+  
 
+  let salesData = Orderdb.find();
   if (start && end) {
     salesData = salesData
       .where("createdAt")

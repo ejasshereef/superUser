@@ -222,25 +222,9 @@ exports.landing_page = async (req, res) => {
   const limit = parseInt(req.query.limit) || 8 || 3;
 
   const banner = await Bannerdb.findOne({ status: "Active" });
-
-  content = Productdb.find()
-    .populate("brand")
-    .sort({ brand: 1 })
-    .skip(page * limit)
-    .limit(limit)
-    .then((content) => {
-      res.render("landingPage", { content, banner });
-    });
-};
-
-exports.loadingPage = async (req, res) => {
-  const page = req.query.page || 0;
-  const limit = parseInt(req.query.limit) || 8 || 3;
-
-  const banner = await Bannerdb.findOne({ status: "Active" });
   const category=await Categorydb.findOne({name:"Female"})
-
   const ladies=await Productdb.find({category})
+
   const findBrand=async(brand)=>{
     let brandName=await Branddb.find({name:brand})
     let content=await Productdb.find({brand:brandName}).limit(8)
@@ -249,8 +233,31 @@ exports.loadingPage = async (req, res) => {
   const adidas=await findBrand("Adidas")
   const nike=await findBrand("Nike")
   const newBalance=await findBrand("NewBalance")
+  const allProduct=await Productdb.find()
+
   
-  res.render("loadingPage", { ladies,nike,newBalance, adidas, banner });
+    res.render("landingPage", {allProduct,ladies,nike,newBalance, adidas, banner });
+};
+
+exports.loadingPage = async (req, res) => {
+  const page = req.query.page || 0;
+  const limit = parseInt(req.query.limit) || 8 || 3;
+
+  const banner = await Bannerdb.findOne({ status: "Active" });
+  const category=await Categorydb.findOne({name:"Female"})
+  const ladies=await Productdb.find({category})
+
+  const findBrand=async(brand)=>{
+    let brandName=await Branddb.find({name:brand})
+    let content=await Productdb.find({brand:brandName}).limit(8)
+    return content
+  }
+  const adidas=await findBrand("Adidas")
+  const nike=await findBrand("Nike")
+  const newBalance=await findBrand("NewBalance")
+  const allProduct=await Productdb.find()
+  
+  res.render("loadingPage", { allProduct,ladies,nike,newBalance, adidas, banner });
   
 };
 
@@ -287,7 +294,6 @@ exports.product_to_cart = async (req, res) => {
     const pId = req.params.id || id;
     const qty = req.body.qty || 1;
     const size=parseInt(req.body.size)||7
-    console.log(size);
     const userId = res.locals.user._id;
     const product = await Productdb.findById(pId).populate("brand");
     let cart = await Cartdb.findOne({ userId: userId });
