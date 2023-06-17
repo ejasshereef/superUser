@@ -48,7 +48,7 @@
                                         <tr>
                                             <td><%= i+1 %></td>
                                             <td><%= order[i].createdAt.toLocaleDateString() %></td>
-                                            <td><%= order[i]._id.toString().slice(-8) %></td>
+                                            <td><%= order[i].invoiceNumber %></td>
                                             <td><%= order[i].userId.name %></td>
                                             <td><% (order[i].products).forEach(element => { %><%= element.name %><br><% }) %></td>
                                             <td > <a <% if (order[i].status=="Cancelled") { %>
@@ -191,7 +191,7 @@
 
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+        
     </div>
 
     <script>

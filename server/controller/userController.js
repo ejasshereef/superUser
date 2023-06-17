@@ -199,13 +199,13 @@ exports.login = (req, res) => {
         if (isValid) {
           const token = createToken(existingUser._id);
           res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-  
+          
           res.redirect("/loadingPage");
         } else {
           res.render("landingPage");
         }
       } else {
-        Swal.fire("user is blocked by admin");
+        
         res.redirect("/");
       }
     }

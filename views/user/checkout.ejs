@@ -189,10 +189,10 @@
             console.log(data);
             if(coupon.value != "first10" && coupon.value != "next20"){
                
-                alert("use valid coupon")
+                swal("use valid coupon")
              }
             if(coupon.value === "first10"){
-                alert("using first 10% coupon")
+                swal("Coupon Applied","10% will be reduced from the total bill amount","success")
                 let discount=(sum*10)/100
                 let walletAmount=wallet-sum
                 let output=sum-(sum*10)/100
@@ -206,7 +206,7 @@
              
              }
              if(coupon.value === "next20"){
-               alert("using next 20% coupon")
+               swal("Coupon Applied","20% will be reduced from the total bill amount","success")
                let discount=(sum*20)/100
                let walletAmount=wallet-sum
               let output=sum-(20*sum)/100
@@ -218,7 +218,7 @@
               }
              }   
           }else{
-            alert("coupon already used once")
+            swal("coupon already used once")
           }
         })
         .catch(error => {

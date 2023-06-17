@@ -91,6 +91,8 @@ exports.dashboard = async (req, res) => {
   const sales = await salesData.populate("userId").exec();
 
   res.render("dashboard", {
+    start,
+    end,
     salesValue,
     sales,
     cancelledOrder,

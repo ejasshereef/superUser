@@ -100,12 +100,14 @@
                     <div class="d-flex align-items-center justify-content-between mb-4">
                        
                         <h6 class="mb-0">Sales Details</h6>
+                       <% if (sales) { %>
                         <form action="/dashboard" method="get">
                             <label for="minPrice">Start: </label>
                             <input 
                               type="date"
                               name="startDate"
                               style="width: 120px"
+                              value="<%= start %>"
                               id="minPrice",
                               placeholder="Start"
                             />
@@ -115,6 +117,7 @@
                               type="date"
                               name="endDate"
                               style="width: 120px"
+                              value="<%= end %>"
                               id="maxPrice",
                               placeholder="End"
                             />
@@ -123,6 +126,7 @@
                               Filter
                             </button>
                           </form>
+                       <% } %>
                     <h6 class="mb-0"></h6>
                         
                     </div>
@@ -138,23 +142,47 @@
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Amount</th>
                                     <th scope="col">Status</th>
-                                   
+                                    <th scope="col">payment Mode</th>
+                                    <th scope="col">Discount Applied</th>
+                                    <th scope="col">Discount Amount</th>
+                                  
                                 </tr>
                             </thead>
                             <tbody>
                                 <% if (sales) { %>
+                                  
                                  <% sales.forEach((element,index) => { %>
                                 <tr>
+                                    
                                         <td><%= index+1 %></td>
                                         <td><%= element.createdAt.toLocaleDateString() %></td>
                                         
-                                        <td><%= element._id.toString().slice(-8) %></td>
+                                        <td><%= element.invoiceNumber %></td>
                                         <td><%= element.userId.name %></td>
                                         <td><% (element.products).forEach(element => { %><%= element.name %><br><% }) %></td>
                                         <td><%= element.subTotal%></td>
                                         <td><%= element.status %></td>
+                                        <td><%= element.paymentMode || element.secondaryPaymentMode%></td>
+                                        <td><% if ( element.coupon ) { %>
+                                            <%= element.coupon %>
+                                            <% } else { %>
+                                             nill
+                                        <% } %> </td>
+                                        <td><% if (element.coupon) { %>
+                                            <% let sum=0 %>
+                                            <% (element.products).forEach(pdt => {%>
+                                                <%sum=sum+pdt.quantity*pdt.price %>
+                                                <%=(sum-element.subTotal).toFixed(2) %>
+                                                   <% }) %>
+                                            <% } else { %>
+                                             <%= 0 %>
+                                        <% } %> </td>
+                                        
+                                      
                                        
                                     </tr>
+                                   
+                                  
                                     <% }) %>
                                    <% } %>
                             </tbody>
@@ -401,7 +429,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     <script>
         $(document).ready(function() {
-          $('#adminTable').DataTable({
+         const table= $('#adminTable').DataTable({
             dom: 'Bfrtip',
             buttons: [
               'copy', 'csv', 'excel', 'pdf', 'print'
@@ -412,22 +440,27 @@ document.addEventListener("DOMContentLoaded", function() {
         var columnHeader = $(column.header());
         var filterType = columnHeader.data('filter');
         
-        if (filterType === 'date') {
-          var minDateInput = $('<input type="date" placeholder="Start">')
-            .appendTo($(column.header()))
-            .on('change', function() {
-              column.search($(this).val(), true, false).draw();
-            });
-            
-          var maxDateInput = $('<input type="date" placeholder="End">')
-            .appendTo($(column.header()))
-            .on('change', function() {
-              column.search($(this).val(), true, false).draw();
-            });
-        }
-      });
+    });
+}
+});
+
+    let sum=0;
+    table.column(5).data().each(function(element) {
+        const cellValue = parseFloat(element);
+    if (!isNaN(cellValue)) {
+      sum += cellValue;
     }
-          });
+
+    
+       
+    });
+    //table.row.add(["Starting Date","<%=start%>","Rnding Date","<%=end%>","",'',"","","",""]).draw()
+    const summaryRow = table.row.add(["<b>Revenue Collected</b>=>","For the Period=>","(<%=start%>)","(<%=end%>)","",'<b><ul>'+sum+'</ul></b>',"","","",""]).draw()
+
+
+    const summaryColumns = $(summaryRow).children('td');
+    const joinedText = summaryColumns.eq(0).text() + ' ' + summaryColumns.eq(1).text() + ' ' + summaryColumns.eq(2).text();
+          
         });
       </script>
     <%- include('_footerDashboard') %>

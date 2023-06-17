@@ -109,10 +109,10 @@ exports.test=async(req,res)=>{
 exports.allProduct=async(req,res)=>{
  
     
-    const page=req.query.page
-    const limit=9;
+    const page=req.query.page||0
+    const limit=4;
     const search=req.query.search||""
-    let sort=req.query.sort
+    let sort=req.query.sort||req.query.selectedValue
     const brand=req.query.brand
    
     const query = {};
@@ -141,30 +141,35 @@ exports.allProduct=async(req,res)=>{
       } else if (sort === 'price_desc') {
         sortOptions.price = -1;
       }
-      let array=[]
+      let array=[],arr=[]
   
-      const products = await Productdb.find(query)
+      let products = await Productdb.find(query)
         .populate('brand')
         .populate('category')
         .sort(sortOptions)
         .sort({brand:1})
         .skip(skip)
-        .limit(limit)
-        .then(content=>{
+        
+      
          if(!brand){
-          for (let i = 0; i < content.length; i++) {
-            array[i]=content[i]
+          for (let i = 0; i < products.length; i++) {
+            array[i]=products[i]
             
           }
          }else{
-          for(let i=0;i<content.length;i++){
-            if(content[i].brand.name === brand){
-               array[i]=content[i]
+          for(let j=0, i=0;i<products.length;i++){
+            if(products[i].brand.name === brand){
+               array[j]=products[i]
+               j++
             }
           }
          }
-      res.render('allProduct',{brand, array,search,sort,currentPage,totalPages,limit})
-        })
+         arr=array.slice(0,limit)
+
+         //res.json({brand, arr,search,sort,currentPage,totalPages,limit})
+         
+      res.render('allProduct',{brand, arr,search,sort,currentPage,totalPages,limit})
+       
   } catch (err) {
     console.log(err);
     res.send(err)
