@@ -126,7 +126,7 @@
 				   /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 			
 		   if (!allowedExtensions.exec(filePath)) {
-			   alert('Kindly select and valid Image');
+			   swal('Image Format Not Accepted','Kindly select and valid Image','warning');
 			   fileInput.value = '';
 			   return false;
 		   }

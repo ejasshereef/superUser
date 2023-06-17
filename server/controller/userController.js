@@ -367,15 +367,21 @@ exports.cart_inc = async (req, res) => {
 
     const itemIndex = cart.products.findIndex((products) =>
       products._id.equals(id)
-    );
+    )
 
     if (!cart) {
       return res.status(404).send("Cart item not found");
     }
 
-    cart.products[itemIndex].quantity += 1;
+    const productId = cart.products[itemIndex].productId;
+    const product=await Productdb.findById(productId)
+    const maxQuantity = product.stock;
 
+   if(cart.products[itemIndex].quantity < maxQuantity){
+    cart.products[itemIndex].quantity += 1;
     await cart.save();
+   }
+
     const quantity = cart.products[itemIndex].quantity;
     const total =
       cart.products[itemIndex].quantity * cart.products[itemIndex].price;
@@ -385,6 +391,7 @@ exports.cart_inc = async (req, res) => {
       message: "Quantity update successfully",
       total: parseInt(total),
       quantity,
+      maxQuantity,
     });
   } catch (err) {
     console.error(err);
@@ -413,6 +420,9 @@ exports.cart_dec = async (req, res) => {
     const quantity = cart.products[itemIndex].quantity;
     const total =
       cart.products[itemIndex].quantity * cart.products[itemIndex].price;
+
+
+     
 
     res.status(200).json({
       success: true,

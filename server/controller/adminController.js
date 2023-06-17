@@ -75,7 +75,12 @@ exports.dashboard = async (req, res) => {
     salesValue += element.subTotal;
   });
 
-  
+
+  let date=new Date()
+  date.getDate
+
+  const todaySale=await Orderdb.find({createdAt:date})
+  console.log("dashboard today sale",todaySale);
 
   let salesData = Orderdb.find();
   if (start && end) {

@@ -58,7 +58,7 @@
 							</div>
 							
 							<div class="col-md-12 form-group">
-								<input   type="file" multiple class="form-control" id="image" name="image" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
+								<input onchange="return fileValidation()"  type="file" multiple class="form-control" id="image" name="image" placeholder="Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Image'">
 							</div>
 
                             <div class="col-md-12 form-group">
@@ -91,7 +91,7 @@
                     /(\.jpg|\.jpeg|\.png|\.gif)$/i;
              
             if (!allowedExtensions.exec(filePath)) {
-                alert('Kindly select and valid Image');
+                swal("Image Format Not Accepted",'Kindly select and valid Image',"warning");
                 fileInput.value = '';
                 return false;
             }

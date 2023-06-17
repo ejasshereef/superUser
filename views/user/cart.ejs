@@ -173,11 +173,13 @@
                                     <div class="checkout_btn_inner d-flex align-items-center ">
                                         <a  class="primary-btn" href="/loadingPage">Continue Shopping</a>
                                         
-                                       <% if (cart.products[0]) { %>
-                                        <a class="primary-btn ml-3" href="/address">Proceed to checkout</a>
-                                        <% } else { %>
-                                         
-                                       <% } %>
+                                      <% if (cart) { %>
+                                        <% if (cart.products[0]) { %>
+                                            <a class="primary-btn ml-3" href="/address">Proceed to checkout</a>
+                                          
+                                             
+                                           <% } %>
+                                      <% } %>
                                     </div>
                                 </td>
                                 
@@ -324,7 +326,13 @@
 					$(`#qty-${id}`).text(data?.quantity)
 					
 					setSubtotal();
-				}else{
+                    if(data.quantity==data.maxQuantity){
+                    if(data.maxQuantity){
+                        swal("Stock limit reached")
+                    }
+
+				}}
+                else{
 					console.log('error');
 				}
 			},
@@ -344,7 +352,7 @@
 		data: { id: id },
 		success: function(data) {
 		  // Handle success response here
-		  console.log(data);
+		 
 		  $(`#total-${id}`).text(data.total);
 		  $(`#qty-${id}`).text(data?.quantity);
 		  setSubtotal();
@@ -357,9 +365,8 @@
 	  });
 	  }else{
 		$(`#qty-${id}`).text(1);
-	  }
-	  
-	 
+	}
+	
 	}
     </script>
     
