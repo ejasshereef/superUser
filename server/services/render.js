@@ -23,10 +23,6 @@ exports.login_otp_page=(req,res)=>{
 }
 
 
-
- 
-
-
 exports.productPage=(req,res)=>{
   axios.get('http://localhost:3000/products')
   .then(function(response){
@@ -52,7 +48,6 @@ exports.userPage=(req,res)=>{
 
 exports.add_user=(req,res)=>{
   if(req.session){
-    //res.setHeader("Cache-Control", "no-cache,no-store");
     console.log(req.session.admin);
     res.render('addUser')
   }
@@ -110,7 +105,7 @@ exports.allProduct=async(req,res)=>{
  
     
     const page=req.query.page||0
-    const limit=4;
+    const limit=6;
     const search=req.query.search||""
     let sort=req.query.sort||req.query.selectedValue
     const brand=req.query.brand
@@ -146,7 +141,7 @@ exports.allProduct=async(req,res)=>{
       let products = await Productdb.find(query)
         .populate('brand')
         .populate('category')
-        // .sort(sortOptions)
+        .sort(sortOptions)
         .sort({brand:1})
         .skip(skip)
         
@@ -165,9 +160,22 @@ exports.allProduct=async(req,res)=>{
           }
          }
          arr=array.slice(0,limit)
-         
 
-         //res.json({brand, arr,search,sort,currentPage,totalPages,limit})
+        //  function bSort(arr){
+        //   for (let i = 0; i < arr.length; i++) {
+        //     for (let j = 0; j < arr.length-1; j++) {
+        //       if(arr[j].price>arr[j+1].price){
+        //         [arr[j],arr[j+1]]=[arr[j+1],arr[j]]
+
+        //       }
+              
+        //     }
+            
+        //   }
+        //   return arr
+        //  }
+        
+        
          
       res.render('allProduct',{brand, arr,search,sort,currentPage,totalPages,limit})
        
@@ -178,20 +186,24 @@ exports.allProduct=async(req,res)=>{
   }
 }
 
-
+const brandRoute=async(brand)=>{
+  let brandName=await Branddb.find({name:brand})
+  let content=await Productdb.find({brand:brandName})
+  return content
+}
 
 exports.adidas=async(req,res)=>{
   try {
     let array=[]
     const page=req.query.page||0;
-    const limit=parseInt(req.query.limit)||9;
+    const limit=parseInt(req.query.limit)||3;
 
     content=await Productdb
     .find()
     .populate('brand')
     .sort({brand:1})
     .skip(page*limit)
-    .limit(limit)
+    
     
     // .then(content=>{console.log(content),res.render('adidas',{content})})
     .then(content=>{
@@ -200,7 +212,8 @@ exports.adidas=async(req,res)=>{
            array[i]=content[i]
         }
       }
-      res.render('adidas',{array})
+      array.slice(0,limit)
+      res.render('adidas',{array,brand:"Adidas"})
       
       })
     
@@ -217,21 +230,22 @@ exports.nike=async(req,res)=>{
   try {
     let array=[]
     const page=req.query.page||0;
-    const limit=parseInt(req.query.limit)||9;
+    const limit=3;
 
     content=await Productdb
     .find()
     .populate('brand')
     .sort({brand:1})
     .skip(page*limit)
-    .limit(limit)
+    
     .then(content=>{
       for(let i=0;i<content.length;i++){
         if(content[i].brand.name=="Nike"){
            array[i]=content[i]
         }
       }
-      res.render('nike',{array})
+      array.slice(0,limit)
+      res.render('nike',{array,brand:"Nike"})
       
       })
     
@@ -246,21 +260,22 @@ exports.new_balance=async(req,res)=>{
   try {
     let array=[]
     const page=req.query.page||0;
-    const limit=parseInt(req.query.limit)||9;
+    const limit=parseInt(req.query.limit)||3;
 
     content=await Productdb
     .find()
     .populate('brand')
     .sort({brand:1})
     .skip(page*limit)
-    .limit(limit)
+   
     .then(content=>{
       for(let i=0;i<content.length;i++){
-        if(content[i].brand.name=="NewBalance"){
+        if(content[i].brand.name==="NewBalance"){
            array[i]=content[i]
         }
       }
-      res.render('newBalance',{array})
+      array.slice(0,limit)
+      res.render('newBalance',{array,brand:"NewBalance"})
       
       })
     

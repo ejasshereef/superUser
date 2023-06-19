@@ -1,8 +1,6 @@
 const express = require("express");
-
 const services = require("../services/render");
 const controller = require("../controller/adminController");
-
 const forController=require('../../src/controller/su_sms');
 const { requireAuthAdmin,checkAdmin,checkExistingAdmin} = require("../../middleware/userMiddleware");
 
@@ -45,5 +43,5 @@ route.get('/add-banner',requireAuthAdmin,checkAdmin,controller.banner)
 route.get('/banner-data',requireAuthAdmin,checkAdmin,controller.banner_data)
 route.post('/add-banner',requireAuthAdmin,checkAdmin,controller.uploadSingle,controller.add_banner)
 route.post('/edit-banner/:id',requireAuthAdmin,checkAdmin,controller.edit_banner)
-// route.get('/sales-report',requireAuthAdmin,checkAdmin,controller.salesReport)
+
 module.exports = route;

@@ -165,7 +165,7 @@ exports.upload = multer({
     fields: 10,
     fieldNameSize: 50,
     fieldSize: 20000,
-    fileSize: 15000000,
+    fileSize: 1500000,
   },
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
@@ -178,7 +178,7 @@ exports.uploadSingle = multer({
     fields: 10,
     fieldNameSize: 50,
     fieldSize: 20000,
-    fileSize: 15000000,
+    fileSize: 1500000,
   },
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);

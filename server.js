@@ -27,7 +27,7 @@ const {PORT}=process.env;
 const port=3000||PORT
 
 //------log requests----//
-// app.use(morgan('tiny'))
+ app.use(morgan('tiny'))
 
 
 //-----mongoDB connection-----//
