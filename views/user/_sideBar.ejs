@@ -21,9 +21,10 @@
                     <div class="head">Brands</div>
                     <form method="GET" action="/all-product" >
                         <ul>
-                            <li class="filter-list"><input value="Nike" class="pixel-radio" type="radio" id="nike" name="brand"><label for="nike">Nike</label></li>
-                            <li class="filter-list"><input value="Adidas" class="pixel-radio" type="radio" id="adidas" name="brand"><label for="adidas">Adidas</label></li>
-                            <li class="filter-list"><input value="NewBalance" class="pixel-radio" type="radio" id="New-Balance" name="brand"><label for="New-Balance">New Balance</label></li>
+                            <li class="filter-list"><input value="" <%= brand === '' ? 'checked' : '' %> class="pixel-radio" type="radio" id="all-product"  name="brand"><label for="all-product">All Product</label></li>
+                            <li class="filter-list"><input value="Nike" <%= brand === 'Nike' ? 'checked' : '' %> class="pixel-radio" type="radio" id="nike" name="brand"><label for="nike">Nike</label></li>
+                            <li class="filter-list"><input value="Adidas" <%= brand === 'Adidas' ? 'checked' : '' %> class="pixel-radio" type="radio" id="adidas" name="brand"><label for="adidas">Adidas</label></li>
+                            <li class="filter-list"><input value="NewBalance" <%= brand === 'NewBalance' ? 'checked' : '' %> class="pixel-radio" type="radio" id="New-Balance" name="brand"><label for="New-Balance">New Balance</label></li>
                             <button class="btn gray_btn"  type="submit" >apply</button>
                         </ul>
                     </form>

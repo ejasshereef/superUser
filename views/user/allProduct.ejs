@@ -1,215 +1,211 @@
 <%- include('_userheader') %>
 
-<body id="category">
+	<body id="category">
 
-	<!-- Start Header Area -->
-	<%- include('_headerNavBar') %>
-	<!-- End Header Area -->
+		<!-- Start Header Area -->
+		<%- include('_headerNavBar') %>
+			<!-- End Header Area -->
 
-	<!-- Start Banner Area -->
-	<section class="banner-area organic-breadcrumb">
-		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-				<div class="col-first">
-					<h1>Shop Category page</h1>
-					<nav class="d-flex align-items-center">
-						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="#">Category<span class="lnr lnr-arrow-right"></span></a>
-						<a href="/all-product">All Product</a>
-					</nav>
+			<!-- Start Banner Area -->
+			<section class="banner-area organic-breadcrumb">
+				<div class="container">
+					<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+						<div class="col-first">
+							<h1>Shop Category page</h1>
+							<nav class="d-flex align-items-center">
+								<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+								<a href="#">Category<span class="lnr lnr-arrow-right"></span></a>
+								<a href="/all-product">All Product</a>
+							</nav>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Banner Area -->
-	 <%- include('_sideBar') %>
+			</section>
+			<!-- End Banner Area -->
+			<%- include('_sideBar') %>
 				<!-- Start Filter Bar -->
 				<%- include('_filterBar') %>
-				<!-- End Filter Bar -->
-				<!-- Start Best Seller -->
-				<section class=" lattest-product-area pb-40 category-list">
-					<div class="container">
-						<div class="row">
-							<% locals.arr.forEach(function(content) { %>
-							<div class="single-product col-lg-4 col-md-6 ">
-								<img class="img-fluid" src=<%= content.image[0] %> alt="">
-								<div class="product-details">
-									<h5><%= content.brand.name %></h5>
-									<a href="/product-detail?id=<%= content._id%>"><h6><%= content.name %></h6></a>
-									<div class="price">
-										<h6><i class="fa fa-inr" aria-hidden="true"></i> <%= content.price %></h6>
-									</div>
-									
-									<div class="container prd-bottom">
-
-										<div class="row">
-											<div class="col-md-6" ></div>
-											<a href="/add-to-cart/<%= content._id %>" class="col-lg-3 social-info">
-												<span class="ti-bag"></span>
-												<!-- <p class="hover-text">add to bag</p> -->
+					<!-- End Filter Bar -->
+					<!-- Start Best Seller -->
+					<section class=" lattest-product-area pb-40 category-list">
+						<div class="container">
+							<div class="row">
+								<% locals.arr.forEach(function(content) { %>
+									<div class="single-product col-lg-4 col-md-6 ">
+										<img class="img-fluid" src=<%=content.image[0] %> alt="">
+										<div class="product-details">
+											<h5>
+												<%= content.brand.name %>
+											</h5>
+											<a href="/product-detail?id=<%= content._id%>">
+												<h6>
+													<%= content.name %>
+												</h6>
 											</a>
-											<a href="" class="col-lg-3 social-info">
-												<span class="lnr lnr-heart"></span>
-												<!-- <p class="hover-text">Wishlist</p> -->
-											</a>
-											
-										</div>
-									</div>
-								</div>
-								
-							</div>
-							<% }); %>
-						</div>
-						
-					</div>
-				</section>
-				<!-- End Best Seller -->
-				<!-- Start Filter Bar -->
-				<div class="filter-bar d-flex flex-wrap align-items-center">
-					<div class="sorting mr-auto">
-						
-					</div>
-					<div class="pagination">
-						
-						<% if (currentPage > 1) { %>
-						  <a href="/all-product?page=<%= currentPage - 1 %>">Previous</a>
-						<% } %>
-					
-						<% for (let i = 1; i <= totalPages; i++) { %>
-						  <% if (i === currentPage) { %>
-							<a href=""><%= i %></a>
-						  <% } else { %>
-							<a href="/all-product?page=<%= i %>"><%= i %></a>
-						  <% } %>
-						<% } %>
-					
-						<% if (currentPage < totalPages) { %>
-						  <a href="/all-product?page=<%= currentPage + 1 %>">Next</a>
-						<% } %>
-					  </div>
-				</div>
-				<!-- End Filter Bar -->
-			</div>
-		</div>
-	</div>
+											<div class="price">
+												<h6><i class="fa fa-inr" aria-hidden="true"></i>
+													<%= content.price %>
+												</h6>
+											</div>
 
-	
+											<div class="container prd-bottom">
 
-	<!-- start footer Area -->
-	<%- include('_footerArea') %>
-	<!-- End footer Area -->
+												<div class="row">
+													<div class="col-md-6"></div>
+													<a href="/add-to-cart/<%= content._id %>"
+														class="col-lg-3 social-info">
+														<span class="ti-bag"></span>
+														<!-- <p class="hover-text">add to bag</p> -->
+													</a>
+													<a href="" class="col-lg-3 social-info">
+														<span class="lnr lnr-heart"></span>
+														<!-- <p class="hover-text">Wishlist</p> -->
+													</a>
 
-	<!-- Modal Quick Product View -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="container relative">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<div class="product-quick-view">
-					<div class="row align-items-center">
-						<div class="col-lg-6">
-							<div class="quick-view-carousel">
-								<div class="item" style="background: url(/assets/img/organic-food/q1.jpg);">
-
-								</div>
-								<div class="item" style="background: url(/assets/img/organic-food/q1.jpg);">
-
-								</div>
-								<div class="item" style="background: url(/assets/img/organic-food/q1.jpg);">
-
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="quick-view-content">
-								<div class="top">
-									<h3 class="head">Mill Oil 1000W Heater, White</h3>
-									<div class="price d-flex align-items-center"><span class="lnr lnr-tag"></span> <span class="ml-10">$149.99</span></div>
-									<div class="category">Category: <span>Household</span></div>
-									<div class="available">Availibility: <span>In Stock</span></div>
-								</div>
-								<div class="middle">
-									<p class="content">Mill Oil is an innovative oil filled radiator with the most modern technology. If you are
-										looking for something that can make your interior look awesome, and at the same time give you the pleasant
-										warm feeling during the winter.</p>
-									<a href="#" class="view-full">View full Details <span class="lnr lnr-arrow-right"></span></a>
-								</div>
-								<div class="bottom">
-									<div class="color-picker d-flex align-items-center">Color:
-										<span class="single-pick"></span>
-										<span class="single-pick"></span>
-										<span class="single-pick"></span>
-										<span class="single-pick"></span>
-										<span class="single-pick"></span>
-									</div>
-									<div class="quantity-container d-flex align-items-center mt-15">
-										Quantity:
-										<input type="text" class="quantity-amount ml-15" value="1" />
-										<div class="arrow-btn d-inline-flex flex-column">
-											<button class="increase arrow" type="button" title="Increase Quantity"><span class="lnr lnr-chevron-up"></span></button>
-											<button class="decrease arrow" type="button" title="Decrease Quantity"><span class="lnr lnr-chevron-down"></span></button>
+												</div>
+											</div>
 										</div>
 
 									</div>
-									<div class="d-flex mt-20">
-										<a href="#" class="view-btn color-2"><span>Add to Cart</span></a>
-										<a href="#" class="like-btn"><span class="lnr lnr-layers"></span></a>
-										<a href="#" class="like-btn"><span class="lnr lnr-heart"></span></a>
+									<% }); %>
+							</div>
+
+						</div>
+					</section>
+					<!-- End Best Seller -->
+					<!-- Start Filter Bar -->
+					<div class="filter-bar d-flex flex-wrap align-items-center">
+						<div class="sorting mr-auto">
+
+						</div>
+						<div class="pagination">
+
+							<% if (currentPage> 1) { %>
+								<a href="/all-product?page=<%= currentPage - 1 %>">Previous</a>
+								<% } %>
+
+									<% for (let i=1; i <=totalPages; i++) { %>
+										<% if (i===currentPage) { %>
+											<a href="">
+												<%= i %>
+											</a>
+											<% } else { %>
+												<a href="/all-product?page=<%= i %>">
+													<%= i %>
+												</a>
+												<% } %>
+													<% } %>
+
+														<% if (currentPage < totalPages) { %>
+															<a href="/all-product?page=<%= currentPage + 1 %>">Next</a>
+															<% } %>
+						</div>
+					</div>
+					<!-- End Filter Bar -->
+					</div>
+					</div>
+					</div>
+
+
+
+					<!-- start footer Area -->
+					<%- include('_footerArea') %>
+						<!-- End footer Area -->
+
+						<!-- Modal Quick Product View -->
+						<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="container relative">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<div class="product-quick-view">
+										<div class="row align-items-center">
+											<div class="col-lg-6">
+												<div class="quick-view-carousel">
+													<div class="item"
+														style="background: url(/assets/img/organic-food/q1.jpg);">
+
+													</div>
+													<div class="item"
+														style="background: url(/assets/img/organic-food/q1.jpg);">
+
+													</div>
+													<div class="item"
+														style="background: url(/assets/img/organic-food/q1.jpg);">
+
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="quick-view-content">
+													<div class="top">
+														<h3 class="head">Mill Oil 1000W Heater, White</h3>
+														<div class="price d-flex align-items-center"><span
+																class="lnr lnr-tag"></span> <span
+																class="ml-10">$149.99</span></div>
+														<div class="category">Category: <span>Household</span></div>
+														<div class="available">Availibility: <span>In Stock</span></div>
+													</div>
+													<div class="middle">
+														<p class="content">Mill Oil is an innovative oil filled radiator
+															with the most modern technology. If you are
+															looking for something that can make your interior look
+															awesome, and at the same time give you the pleasant
+															warm feeling during the winter.</p>
+														<a href="#" class="view-full">View full Details <span
+																class="lnr lnr-arrow-right"></span></a>
+													</div>
+													<div class="bottom">
+														<div class="color-picker d-flex align-items-center">Color:
+															<span class="single-pick"></span>
+															<span class="single-pick"></span>
+															<span class="single-pick"></span>
+															<span class="single-pick"></span>
+															<span class="single-pick"></span>
+														</div>
+														<div class="quantity-container d-flex align-items-center mt-15">
+															Quantity:
+															<input type="text" class="quantity-amount ml-15"
+																value="1" />
+															<div class="arrow-btn d-inline-flex flex-column">
+																<button class="increase arrow" type="button"
+																	title="Increase Quantity"><span
+																		class="lnr lnr-chevron-up"></span></button>
+																<button class="decrease arrow" type="button"
+																	title="Decrease Quantity"><span
+																		class="lnr lnr-chevron-down"></span></button>
+															</div>
+
+														</div>
+														<div class="d-flex mt-20">
+															<a href="#" class="view-btn color-2"><span>Add to
+																	Cart</span></a>
+															<a href="#" class="like-btn"><span
+																	class="lnr lnr-layers"></span></a>
+															<a href="#" class="like-btn"><span
+																	class="lnr lnr-heart"></span></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<script>
+						<script>
+							function submitForm() {
+								let selectedOption = document.getElementById("sort").value;
+								if (selectedOption === "price_asc") {
+									document.getElementById("sort").action = "/all-product?sort=price_asc";
+								} else if (selectedOption === "price_desc") {
+									document.getElementById("sort").action = "/all-product?sort=price_desc";
+								}
+								document.getElementById("myForm").submit();
+							}
 
-		// function sort(){
-		// 	$.ajax({
-		// 		url:'all-product',
-		// 		method:"get",
-		// 		data:{sortBy},
-		// 		success:function(data){
-		// 			if(data.success){
-		// 				let arr=data.arr
-		// 				return arr
-		// 			}
-		// 		}
-		// 	})
+						</script>
 
-		// }
-
-	</script>
-
-	<!-- <script>
-		$(document).ready(function() {
-  // Attach event listener for 'change' event
-  $("#sort").change(function() {
-    // Get the selected value
-    var selectedValue = $(this).val();
-	let arr=[]
-    // Perform AJAX request
-    $.ajax({
-      url: "/all-product",
-      data: { selectedValue: selectedValue },
-      type: "GET",
-      success: function(response) {
-         arr=response.arr
-		
-      },
-      error: function(xhr, status, error) {
-        // Handle the AJAX error here
-        console.log("AJAX request failed: " + error);
-      }
-    });
-  });
-});
-
-	</script>
-	 -->
-
-	<%- include('_userfooter') %>
+						<%- include('_userfooter') %>

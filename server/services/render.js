@@ -146,7 +146,7 @@ exports.allProduct=async(req,res)=>{
       let products = await Productdb.find(query)
         .populate('brand')
         .populate('category')
-        .sort(sortOptions)
+        // .sort(sortOptions)
         .sort({brand:1})
         .skip(skip)
         
@@ -165,6 +165,7 @@ exports.allProduct=async(req,res)=>{
           }
          }
          arr=array.slice(0,limit)
+         
 
          //res.json({brand, arr,search,sort,currentPage,totalPages,limit})
          
