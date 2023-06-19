@@ -83,7 +83,7 @@
                                     <% (cart.products).forEach(element => { %>
                                      
                                     
-                                     <li><a href="#"><%= element.name %><span class="middle">x <%= element.quantity %></span> <span class="last"><%= element.price*element.quantity %></span></a></li>
+                                     <li><a href="#"><%= element.name.slice(0,15) %><span class="middle">x <%= element.quantity %></span> <span class="last"><%= element.price*element.quantity %></span></a></li>
                                     
                                      <% sum = sum+(element.price*element.quantity); %>
                                      <% }) %>
